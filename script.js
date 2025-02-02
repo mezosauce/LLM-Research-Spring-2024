@@ -1,47 +1,46 @@
-document.addEventListener("DOMContentLoaded", function () {
-    var TestGraph = cytoscape({
-        container: document.getElementById('cy'),
-        elements: [
-            { data: { id: 'Idle', label: 'Idle' } },
-            { data: { id: 'MemberJoined', label: 'Member Joined' } },
-            { data: { id: 'ReactionAdded', label: 'Reaction Added' } },
-            { data: { id: 'ResponseAdded', label: 'Response Added' } },
-            { data: { id: 'UserTagged', label: 'User Tagged' } },
-            
-            { data: { source: 'Idle', target: 'MemberJoined', label: 'User Joins' } },
-            { data: { source: 'MemberJoined', target: 'ReactionAdded', label: 'Reaction Added' } },
-            { data: { source: 'MemberJoined', target: 'ResponseAdded', label: 'Response Added' } },
-            { data: { source: 'MemberJoined', target: 'UserTagged', label: 'User Tagged' } },
-            { data: { source: 'ReactionAdded', target: 'Idle', label: 'Reaction Removed' } },
-            { data: { source: 'ResponseAdded', target: 'Idle', label: 'Response Removed' } },
-            { data: { source: 'UserTagged', target: 'Idle', label: 'Tag Removed' } }
-        ],
-        style: [
-            {
-                selector: 'node',
-                style: {
-                    'background-color': '#007bff',
-                    'label': 'data(label)',
-                    'color': '#fff',
-                    'text-valign': 'center',
-                    'text-halign': 'center'
-                }
-            },
-            {
-                selector: 'edge',
-                style: {
-                    'width': 2,
-                    'curve-style': 'bezier',
-                    'target-arrow-shape': 'triangle',
-                    'label': 'data(label)',
-                    'text-rotation': 'autorotate',
-                    'color': '#000',
-                    'font-size': '12px'
-                }
-            }
-        ],
-        layout: {
-            name: 'cose'
-        }
+let contextMenu = document.getElementById("contextMenu");
+let selectedElement = null;
+
+// Function to highlight the selected element
+function highlightElement(element) {
+    if (selectedElement) {
+        selectedElement.classList.remove("selected");
+    }
+    selectedElement = element;
+    selectedElement.classList.add("selected");
+}
+
+// Left-click: Highlight element
+document.querySelectorAll(".clickable").forEach(element => {
+    element.addEventListener("click", function(event) {
+        highlightElement(event.target);
     });
 });
+
+// Right-click: Highlight and show context menu
+document.querySelectorAll(".clickable").forEach(element => {
+    element.addEventListener("contextmenu", function(event) {
+        event.preventDefault(); // Prevent default browser menu
+        
+        highlightElement(event.target); // Ensure the element gets highlighted
+
+        // Show the menu at the cursor position
+        contextMenu.style.display = "block";
+        contextMenu.style.left = event.pageX + "px";
+        contextMenu.style.top = event.pageY + "px";
+
+        // Store selected element
+        contextMenu.dataset.targetId = event.target.id;
+    });
+});
+
+// Close menu when clicking outside
+document.addEventListener("click", function(event) {
+    if (!event.target.closest(".menu") && !event.target.closest(".clickable")) {
+        closeMenu();
+    }
+});
+
+function closeMenu() {
+    contextMenu.style.display = "none";
+}
