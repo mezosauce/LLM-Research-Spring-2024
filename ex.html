@@ -1,58 +1,86 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOT Language Visualization</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/full.render.js"></script>
+    <title>SVG with Context Menu</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
+        svg {
+            border: 1px solid black;
         }
-        #graph-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
+        .menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid black;
+            padding: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .menu button {
+            display: block;
+            width: 100%;
+            margin: 2px 0;
+            padding: 5px;
+            border: none;
+            cursor: pointer;
+            background: lightgray;
+        }
+        .menu button:hover {
+            background: darkgray;
         }
     </style>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>DOT Language FSM Visualization</h2>
-    <div id="graph-container"></div>
 
-    <script>
-        const dotString = `
-            digraph FSM {
-                Idle [label="Idle"];
-                MemberJoined [label="Member Joined"];
-                ReactionAdded [label="Reaction Added"];
-                ResponseAdded [label="Response Added"];
-                UserTagged [label="User Tagged"];
+<svg width="400" height="300">
+    <!-- IDLE State -->
+    <ellipse id="idle" class="clickable" cx="200" cy="50" rx="40" ry="20" stroke="black" fill="white"/>
+    <text x="185" y="55" font-size="12">IDLE</text>
 
-                Idle -> MemberJoined [label="User Joins"];
-                MemberJoined -> ReactionAdded [label="Reaction Added"];
-                MemberJoined -> ResponseAdded [label="Response Added"];
-                MemberJoined -> UserTagged [label="User Tagged"];
-                ReactionAdded -> Idle [label="Reaction Removed"];
-                ResponseAdded -> Idle [label="Response Removed"];
-                UserTagged -> Idle [label="Tag Removed"];
-            }
-        `;
+    <!-- HAPPY_ANNIVERSARY_DETECTED State -->
+    <ellipse id="happy" class="clickable" cx="200" cy="120" rx="120" ry="30" stroke="black" fill="white"/>
+    <text x="130" y="125" font-size="12">HAPPY_ANNIVERSARY_DETECTED</text>
 
-        // Ensure Viz.js properly initializes
-        Module.onRuntimeInitialized = () => {
-            const viz = new Viz();
-            viz.renderSVGElement(dotString)
-                .then(function(element) {
-                    document.getElementById("graph-container").appendChild(element);
-                })
-                .catch(error => {
-                    console.error("Graph rendering error:", error);
-                });
-        };
-    </script>
+    <!-- TADA_RAINING State -->
+    <ellipse id="tada" class="clickable" cx="200" cy="200" rx="80" ry="25" stroke="black" fill="white"/>
+    <text x="160" y="205" font-size="12">TADA_RAINING</text>
+</svg>
+
+<!-- Context Menu -->
+<div id="contextMenu" class="menu">
+    <button onclick="alert('Edit option clicked!')">Edit</button>
+    <button onclick="alert('Delete option clicked!')">Delete</button>
+    <button onclick="closeMenu()">Close</button>
+</div>
+
+<script>
+    let contextMenu = document.getElementById("contextMenu");
+
+    document.querySelectorAll(".clickable").forEach(element => {
+        element.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Show menu at click position
+            contextMenu.style.display = "block";
+            contextMenu.style.left = event.pageX + "px";
+            contextMenu.style.top = event.pageY + "px";
+
+            // Store selected element
+            contextMenu.dataset.targetId = event.target.id;
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+        if (!event.target.closest(".menu") && !event.target.closest(".clickable")) {
+            closeMenu();
+        }
+    });
+
+    function closeMenu() {
+        contextMenu.style.display = "none";
+    }
+</script>
+
 </body>
 </html>
