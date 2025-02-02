@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOT Language Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/full.render.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #graph-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>DOT Language FSM Visualization</h2>
+    <div id="graph-container"></div>
+
+    <script>
+        const dotString = `
+            digraph FSM {
+                Idle [label="Idle"];
+                MemberJoined [label="Member Joined"];
+                ReactionAdded [label="Reaction Added"];
+                ResponseAdded [label="Response Added"];
+                UserTagged [label="User Tagged"];
+
+                Idle -> MemberJoined [label="User Joins"];
+                MemberJoined -> ReactionAdded [label="Reaction Added"];
+                MemberJoined -> ResponseAdded [label="Response Added"];
+                MemberJoined -> UserTagged [label="User Tagged"];
+                ReactionAdded -> Idle [label="Reaction Removed"];
+                ResponseAdded -> Idle [label="Response Removed"];
+                UserTagged -> Idle [label="Tag Removed"];
+            }
+        `;
+
+        // Ensure Viz.js properly initializes
+        Module.onRuntimeInitialized = () => {
+            const viz = new Viz();
+            viz.renderSVGElement(dotString)
+                .then(function(element) {
+                    document.getElementById("graph-container").appendChild(element);
+                })
+                .catch(error => {
+                    console.error("Graph rendering error:", error);
+                });
+        };
+    </script>
+</body>
+</html>
