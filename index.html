@@ -54,7 +54,83 @@
                         <text id="text2" class="draggable clickable" x="210" y="200" font-size="12">Detect variation</text>
                     </g>
                 </svg>
-            
+                
+                <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet">
+                    <!-- Idle State -->
+                    <ellipse id="idle" class="clickable" cx="300" cy="50" rx="50" ry="25" stroke="black" fill="white"/>
+                    <text x="285" y="55" font-size="12" class="clickable">Idle</text>
+                
+                    <!-- Member Joined State -->
+                    <ellipse id="memberJoined" class="clickable" cx="300" cy="120" rx="90" ry="30" stroke="black" fill="white"/>
+                    <text x="255" y="125" font-size="12" class="clickable">Member Joined</text>
+                
+                    <!-- Reaction Added State -->
+                    <ellipse id="reactionAdded" class="clickable" cx="150" cy="200" rx="80" ry="25" stroke="black" fill="white"/>
+                    <text x="120" y="205" font-size="12" class="clickable">Reaction Added</text>
+                
+                    <!-- User Tagged State -->
+                    <ellipse id="userTagged" class="clickable" cx="300" cy="200" rx="80" ry="25" stroke="black" fill="white"/>
+                    <text x="275" y="205" font-size="12" class="clickable">User Tagged</text>
+                
+                    <!-- Response Added State -->
+                    <ellipse id="responseAdded" class="clickable" cx="450" cy="200" rx="80" ry="25" stroke="black" fill="white"/>
+                    <text x="420" y="205" font-size="12" class="clickable">Response Added</text>
+                
+                    <!-- Arrows and Labels -->
+                    <g id="arrowGroup1" class="clickable">
+                        <line x1="300" y1="75" x2="300" y2="100" stroke="black"/>
+                        <polygon points="295,100 305,100 300,110" fill="black"/>
+                        <text x="310" y="90" font-size="12">User Joins</text>
+                    </g>
+                
+                    <g id="arrowGroup2" class="clickable">
+                        <line x1="250" y1="140" x2="170" y2="180" stroke="black"/>
+                        <polygon points="170,180 175,185 180,175" fill="black"/>
+                        <text x="180" y="160" font-size="12">Reaction Added</text>
+                    </g>
+                
+                    <g id="arrowGroup3" class="clickable">
+                        <line x1="300" y1="150" x2="300" y2="175" stroke="black"/>
+                        <polygon points="295,175 305,175 300,185" fill="black"/>
+                        <text x="310" y="165" font-size="12">User Tagged</text>
+                    </g>
+                
+                    <g id="arrowGroup4" class="clickable">
+                        <line x1="350" y1="140" x2="430" y2="180" stroke="black"/>
+                        <polygon points="430,180 435,185 440,175" fill="black"/>
+                        <text x="390" y="160" font-size="12">Response Added</text>
+                    </g>
+                
+                    <g id="arrowGroup5" class="clickable">
+                        <line x1="220" y1="120" x2="150" y2="100" stroke="black"/>
+                        <polygon points="150,100 155,95 160,105" fill="black"/>
+                        <text x="170" y="90" font-size="12">Tag Removed</text>
+                    </g>
+                
+                    <g id="arrowGroup6" class="clickable">
+                        <line x1="450" y1="120" x2="500" y2="100" stroke="black"/>
+                        <polygon points="500,100 505,95 510,105" fill="black"/>
+                        <text x="460" y="90" font-size="12">Response Removed</text>
+                    </g>
+                
+                    <g id="arrowGroup7" class="clickable">
+                        <line x1="150" y1="175" x2="150" y2="120" stroke="black"/>
+                        <polygon points="145,120 155,120 150,110" fill="black"/>
+                        <text x="100" y="140" font-size="12">Reaction Removed</text>
+                    </g>
+                
+                    <g id="arrowGroup8" class="clickable">
+                        <line x1="450" y1="175" x2="450" y2="120" stroke="black"/>
+                        <polygon points="445,120 455,120 450,110" fill="black"/>
+                        <text x="460" y="140" font-size="12">Response Removed</text>
+                    </g>
+                
+                    <g id="arrowGroup9" class="clickable">
+                        <line x1="300" y1="225" x2="300" y2="260" stroke="black"/>
+                        <polygon points="295,260 305,260 300,270" fill="black"/>
+                        <text x="310" y="250" font-size="12">User Tagged</text>
+                    </g>
+                </svg>
             <!-- Context Menu -->
             <div id="contextMenu" class="menu">
                 <button onclick="alert('Edit option clicked!')">Edit</button>
