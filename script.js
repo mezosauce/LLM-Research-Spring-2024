@@ -3,16 +3,29 @@ let selectedElement = null;
 
 // Function to highlight the selected element
 function highlightElement(element) {
-    if (selectedElement) {
+    if (selectedElement === element) {
+        // If already selected, remove selection (toggle off)
         selectedElement.classList.remove("selected");
+        selectedElement = null;
+    } else {
+        // Remove previous selection if any
+        if (selectedElement) {
+            selectedElement.classList.remove("selected");
+        }
+        // Set new selection (toggle on)
+        selectedElement = element;
+        selectedElement.classList.add("selected");
     }
-    selectedElement = element;
-    selectedElement.classList.add("selected");
 }
+
+
 //Group Selecting
 //Graph rendering
 //Adjust activties in their own page
 //Move nodes with edges attached
+
+
+
 // Left-click: Highlight element
 document.querySelectorAll(".clickable").forEach(element => {
     element.addEventListener("click", function(event) {
