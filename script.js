@@ -9,7 +9,10 @@ function highlightElement(element) {
     selectedElement = element;
     selectedElement.classList.add("selected");
 }
-
+//Group Selecting
+//Graph rendering
+//Adjust activties in their own page
+//Move nodes with edges attached
 // Left-click: Highlight element
 document.querySelectorAll(".clickable").forEach(element => {
     element.addEventListener("click", function(event) {
