@@ -47,3 +47,6 @@ svg {
     stroke: red ;
     stroke-width: 1px ;
 }
+path {
+    pointer-events: none; /* Prevents the path from capturing clicks */
+}
