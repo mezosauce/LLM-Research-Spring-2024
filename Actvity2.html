@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity_2</title>
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body> 
     <div class="Main">
         <div class="NL_desc">
             <div class="activity_2">
                 <h2>Activity 2:</h2>
-                
                 <p>When variations of “Happy Anniversary” are used in Zoom Chat, a celebration of raining Tada emojis will rain down in the chat window.</p>
             </div>
         </div>
@@ -21,51 +20,47 @@
                 <h2>Activity 2</h2>
                 <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
                     <!-- IDLE State -->
-                    <g class="clickable">
-                    <ellipse id="idle"  cx="200" cy="50" rx="40" ry="20" stroke="black" fill="white"/>
-                    <text x="185" y="55" font-size="12" >IDLE</text>
-                    <g id="arrowGroup1" >
-                        <!-- Adjusted Arrow Line and Arrowhead (higher) -->
+                    <g class="clickable" id="idleGroup">
+                        <ellipse id="idle" cx="200" cy="50" rx="40" ry="20" stroke="black" fill="white"/>
+                        <text x="185" y="55" font-size="12" ondblclick="editText(event)">IDLE</text>
+                    </g>
+                    <g class="clickable" id="idleGroup"  >
+                                
                         <line id="arrow1" x1="200" y1="70" x2="200" y2="110" stroke="black"/>
                         <polygon id="arrowhead1" points="195,110 205,110 200,120" fill="black"/>
-                        <text id="text1" x="210" y="100" font-size="12">Happy Anniversary</text>
+                        <text id="text1" x="210" y="100" font-size="12"  ondblclick="editText(event)">Happy Anniversary</text>
                     </g>
-                    </g>
+
                     <!-- HAPPY_ANNIVERSARY_DETECTED State -->
-                    <g class="clickable">
-                    <ellipse id="happy"  cx="200" cy="150" rx="120" ry="30" stroke="black" fill="white"/>
-                    <text x="104" y="155" font-size="12" >HAPPY_ANNIVERSARY_DETECTED</text>
+                    <g class="clickable" id="happyGroup">
+                        <ellipse id="happy" cx="200" cy="150" rx="120" ry="30" stroke="black" fill="white"/>
+                        <text x="104" y="155" font-size="12" ondblclick="editText(event)">HAPPY_ANNIVERSARY_DETECTED</text>
                     </g>
+
                     <!-- TADA_RAINING State -->
-                    <g class="clickable">
-                    <ellipse id="tada"  cx="200" cy="245" rx="80" ry="25" stroke="black" fill="white"/>
-                    <text x="160" y="250" font-size="12" >TADA_RAINING</text>
+                    <g class="clickable" id="tadaGroup">
+                        <ellipse id="tada" cx="200" cy="245" rx="80" ry="25" stroke="black" fill="white"/>
+                        <text x="160" y="250" font-size="12" ondblclick="editText(event)">TADA_RAINING</text>
+                        
                     </g>
-                    <!-- Arrows -->
-                    
-                    
-                    <!-- Group for Arrow 2 (Adjusted higher) -->
-                    <g id="arrowGroup2" class="clickable">
-                        <!-- Adjusted Arrow Line and Arrowhead (higher) -->
+                    <g class="clickable">
                         <line id="arrow2" x1="200" y1="180" x2="200" y2="220" stroke="black"/>
                         <polygon id="arrowhead2" points="195,210 205,210 200,220" fill="black"/>
-                        <text id="text2" x="210" y="200" font-size="12">Detect variation</text>
+                        <text id="text2" x="210" y="200" font-size="12" ondblclick="editText(event)">Detect variation</text>
                     </g>
                 </svg>
-
-
-               
-            <!-- Context Menu -->
-            <div id="contextMenu" class="menu">
-                <button onclick="alert('Edit option clicked!')">Edit</button>
-                <button onclick="alert('Delete option clicked!')">Delete</button>
-                <button onclick="closeMenu()">Close</button>
             </div>
         </div>
     </div>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="menu">
+        <button onclick="alert('Edit option clicked!')">Edit</button>
+        <button onclick="alert('Delete option clicked!')">Delete</button>
+        <button onclick="closeMenu()">Close</button>
     </div>
+
     <!--JavaScript-->
     <script src="script.js"></script>
-    
 </body>
 </html>
