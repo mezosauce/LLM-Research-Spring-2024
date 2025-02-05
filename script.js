@@ -2,24 +2,30 @@ let contextMenu = document.getElementById("contextMenu");
 let selectedElement = null;
 let offsetX = 0, offsetY = 0;
 
-// Function to highlight the selected element
+// Function to highlight a new element and deselect the previous one
 function highlightElement(element) {
-    if (selectedElement === element) {
-        selectedElement.classList.remove("selected");
-        selectedElement = null;
-    } else {
-        if (selectedElement) {
-            selectedElement.classList.remove("selected");
-        }
+    if (selectedElement) {
+        selectedElement.classList.toggle("selected");
+    }
+
+    // Select the new element only if it's different from the previous one
+    if (selectedElement !== element) {
         selectedElement = element;
-        selectedElement.classList.add("selected");
+        selectedElement.classList.toggle("selected");
+        element = null;
+    } else {
+        // If clicking the same element, deselect it
+        selectedElement = null;
     }
 }
 
 // Left-click: Toggle highlight
 document.querySelectorAll(".clickable").forEach(element => {
     element.addEventListener("click", function(event) {
-        highlightElement(event.target.closest("g")); // Ensure we highlight the group
+        const targetElement = event.target.closest("g"); // Ensure we highlight the group
+        if (targetElement) {
+            highlightElement(targetElement);
+        }
     });
 });
 
