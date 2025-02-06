@@ -1,22 +1,14 @@
 let contextMenu = document.getElementById("contextMenu");
 let selectedElement = null;
-let offsetX = 0, offsetY = 0;
 
 // Function to highlight a new element and deselect the previous one
 function highlightElement(element) {
-    if (selectedElement) {
-        selectedElement.classList.toggle("selected");
+    if (selectedElement && selectedElement !== element) {
+        selectedElement.classList.add("selected");
     }
-
-    // Select the new element only if it's different from the previous one
-    if (selectedElement !== element) {
-        selectedElement = element;
-        selectedElement.classList.toggle("selected");
-        element = null;
-    } else {
-        // If clicking the same element, deselect it
-        selectedElement = null;
-    }
+    
+    selectedElement = selectedElement === element ? null : element;
+    element.classList.toggle("selected", selectedElement !== null);
 }
 
 // Left-click: Toggle highlight
