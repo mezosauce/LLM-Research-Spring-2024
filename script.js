@@ -4,7 +4,7 @@ let selectedElement = null;
 // Function to highlight a new element and deselect the previous one
 function highlightElement(element) {
     if (selectedElement && selectedElement !== element) {
-        selectedElement.classList.add("selected");
+        selectedElement.classList.toggle("selected");
     }
     
     selectedElement = selectedElement === element ? null : element;
