@@ -5,21 +5,19 @@ let selectedElement = null;
 function highlightElement(element) {
     if (selectedElement === element) {
         // If clicking the same element, unhighlight it
-        console.log("DEEEEHighlighting:", element); // Debugging log
+        console.log("DEEEEHighlighting (removing from):", element);
         element.classList.remove("selected");
         selectedElement = null;
     } else {
-        // Deselect previous element if there's one
+        // Deselect previous element (if any)
         if (selectedElement && selectedElement !== element) {
             console.log("DEEEEHighlighting (removing from):", selectedElement);
             selectedElement.classList.remove("selected");
-            selectedElement = null;
-
         }
 
         // Highlight the new element
         console.log("Highlighting:", element);
-        element.classList.toggle("selected");
+        element.classList.add("selected");
         selectedElement = element;
     }
 }
