@@ -10,14 +10,14 @@ function highlightElement(element) {
         selectedElement = null;
     } else {
         // Deselect previous element (if any)
-        if (selectedElement && selectedElement !== element) {
+        if (selectedElement ) {
             console.log("DEEEEHighlighting (removing from):", selectedElement);
             selectedElement.classList.remove("selected");
         }
 
         // Highlight the new element
         console.log("Highlighting:", element);
-        element.classList.add("selected");
+        element.classList.toggle("selected");
         selectedElement = element;
     }
 }
