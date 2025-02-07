@@ -15,20 +15,19 @@
             </div>
         </div>
         <div class="Demonstration">
-            <div id="TestGraph">
+            <div id="TestGraph" >
                 <!--ACTVITY 2-->
                 <h2>Activity 2</h2>
-                <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" >
+
                     <!-- IDLE State -->
-                    <g class="clickable" id="idleGroup">
+                    <g class="clickable" >
                         <ellipse id="idle" cx="200" cy="50" rx="40" ry="20" stroke="black" fill="white"/>
                         <text x="185" y="55" font-size="12" ondblclick="editText(event)">IDLE</text>
                         
                     </g>
-                    
-                                
-                        
-                    <g class="clickable sticky">
+                    <!--Happy Anniversersary ARROW-->      
+                    <g class="clickable" >
                         <line id="arrow1" x1="200" y1="70" x2="200" y2="110" stroke="black"/>
                         <polygon id="arrowhead1" points="195,110 205,110 200,120" fill="black"/>
                         <text id="text1" x="210" y="100" font-size="12" ondblclick="editText(event)">Happy Anniversary</text>s
@@ -41,11 +40,13 @@
                     </g>
 
                     <!-- TADA_RAINING State -->
-                    <g class="clickable" id="tadaGroup">
+                    <g id="tadaGroup" class="clickable">
                         <ellipse id="tada" cx="200" cy="245" rx="80" ry="25" stroke="black" fill="white"/>
                         <text x="160" y="250" font-size="12" ondblclick="editText(event)">TADA_RAINING</text>
                         
                     </g>
+
+                    <!--Detect variation ARROW-->      
                     <g class="clickable">
                         <line id="arrow2" x1="200" y1="180" x2="200" y2="220" stroke="black"/>
                         <polygon id="arrowhead2" points="195,210 205,210 200,220" fill="black"/>
@@ -64,6 +65,8 @@
     </div>
 
     <!--JavaScript-->
-    <script src="script.js"></script>
+    <script src="Funcs/Drag.js"></script>
+    <script src="Funcs/selected.js"></script>
+    <script src="Funcs/EditText.js"></script>
 </body>
 </html>
