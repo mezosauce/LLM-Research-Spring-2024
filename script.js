@@ -3,14 +3,20 @@ let selectedElement = null;
 
 // Function to highlight a new element and deselect the previous one
 function highlightElement(element) {
-    if (selectedElement && selectedElement !== element) {
-        selectedElement.classList.toggle("selected");
+    if (selectedElement === element) {
+        // If clicking the same element, unhighlight it
+        element.classList.remove("selected");
+        selectedElement = null;
+    } else {
+        // Deselect previous element if there's one
+        if (selectedElement) {
+            selectedElement.classList.remove("selected");
+        }
+        // Highlight the new element
+        element.classList.add("selected");
+        selectedElement = element;
     }
-    
-    selectedElement = selectedElement === element ? null : element;
-    element.classList.toggle("selected", selectedElement !== null);
 }
-
 // Left-click: Toggle highlight
 document.querySelectorAll(".clickable").forEach(element => {
     element.addEventListener("click", function(event) {
