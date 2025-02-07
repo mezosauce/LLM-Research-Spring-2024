@@ -27,14 +27,14 @@
                         
                     </g>
                     <!--Happy Anniversersary ARROW-->      
-                    <g class="clickable" >
+                    <g class="clickable sticky" >
                         <line id="arrow1" x1="200" y1="70" x2="200" y2="110" stroke="black"/>
                         <polygon id="arrowhead1" points="195,110 205,110 200,120" fill="black"/>
                         <text id="text1" x="210" y="100" font-size="12" ondblclick="editText(event)">Happy Anniversary</text>s
                     </g>
                     
                     <!-- HAPPY_ANNIVERSARY_DETECTED State -->
-                    <g class="clickable" id="happyGroup">
+                    <g class="clickable " id="happyGroup">
                         <ellipse id="happy" cx="200" cy="150" rx="120" ry="30" stroke="black" fill="white"/>
                         <text x="104" y="155" font-size="12" ondblclick="editText(event)">HAPPY_ANNIVERSARY_DETECTED</text>
                     </g>
@@ -68,5 +68,6 @@
     <script src="Funcs/Drag.js"></script>
     <script src="Funcs/selected.js"></script>
     <script src="Funcs/EditText.js"></script>
+    <script src="/Funcs/sticky"></script>
 </body>
 </html>
