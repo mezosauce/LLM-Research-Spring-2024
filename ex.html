@@ -3,77 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activity_2</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Sticky Arrow</title>
+    <style>
+        svg {
+            border: 1px solid black;
+        }
+        .clickable {
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body> 
-    <div class="Main">
-        <div class="NL_desc">
-            <div class="activity_2">
-                <h2>Activity 2:</h2>
-                <p>When variations of “Happy Anniversary” are used in Zoom Chat, a celebration of raining Tada emojis will rain down in the chat window.</p>
-            </div>
-        </div>
-        <div class="Demonstration">
-            <div id="TestGraph">
-                <h2>Activity 2</h2>
-                <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
-                    <g class="clickable" onmousedown="startDrag(event)" onmouseup="stopDrag()" onmousemove="drag(event)">
-                        <ellipse id="idle" cx="200" cy="50" rx="40" ry="20" stroke="black" fill="white"/>
-                        <text id="textIdle" x="185" y="55" font-size="12" ondblclick="editText(event)">IDLE</text>
-                    </g>
-                    <g class="clickable" onmousedown="startDrag(event)" onmouseup="stopDrag()" onmousemove="drag(event)">
-                        <ellipse id="happy" cx="200" cy="150" rx="120" ry="30" stroke="black" fill="white"/>
-                        <text id="textHappy" x="104" y="155" font-size="12" ondblclick="editText(event)">HAPPY_ANNIVERSARY_DETECTED</text>
-                    </g>
-                    <g class="clickable" onmousedown="startDrag(event)" onmouseup="stopDrag()" onmousemove="drag(event)">
-                        <ellipse id="tada" cx="200" cy="245" rx="80" ry="25" stroke="black" fill="white"/>
-                        <text id="textTada" x="160" y="250" font-size="12" ondblclick="editText(event)">TADA_RAINING</text>
-                    </g>
-                </svg>
-            </div>
-        </div>
-    </div>
-    <script>
-        function editText(event) {
-            let textElement = event.target;
-            let input = document.createElement("textarea");
-            input.value = textElement.textContent;
-            input.style.position = "absolute";
-            input.style.left = textElement.getAttribute("x") + "px";
-            input.style.top = textElement.getAttribute("y") - 10 + "px";
-            input.style.fontSize = textElement.getAttribute("font-size") + "px";
-            input.style.width = "200px";
-            input.style.height = "20px";
-            
-            input.addEventListener("blur", function() {
-                textElement.textContent = input.value;
-                document.body.removeChild(input);
-            });
-            
-            document.body.appendChild(input);
-            input.focus();
-        }
+<body>
 
-        let selectedElement = null;
-        let offsetX = 0, offsetY = 0;
+<svg width="400" height="300">
+    <!-- IDLE State -->
+    <g class="clickable draggable" id="idleGroup">
+        <ellipse id="idle" cx="200" cy="50" rx="40" ry="20" stroke="black" fill="white"/>
+        <text id="idleText" x="185" y="55" font-size="12">IDLE</text>
+    </g>
 
-        function startDrag(event) {
-            selectedElement = event.target.closest("g");
-            if (!selectedElement) return;
-            let rect = selectedElement.getBoundingClientRect();
-            offsetX = event.clientX - rect.left;
-            offsetY = event.clientY - rect.top;
-        }
+    <!-- Happy Anniversary Arrow (Sticky) -->
+    <g class="clickable sticky" id="arrowGroup">
+        <line id="arrow1" stroke="black" stroke-width="2"/>
+        <polygon id="arrowhead1" fill="black"/>
+        <text id="text1" font-size="12">Happy Anniversary</text>
+    </g>
 
-        function drag(event) {
-            if (!selectedElement) return;
-            selectedElement.setAttribute("transform", `translate(${event.clientX - offsetX}, ${event.clientY - offsetY})`);
-        }
+    <!-- HAPPY_ANNIVERSARY_DETECTED State -->
+    <g class="clickable draggable" id="happyGroup">
+        <ellipse id="happy" cx="200" cy="150" rx="120" ry="30" stroke="black" fill="white"/>
+        <text id="happyText" x="104" y="155" font-size="12">HAPPY_ANNIVERSARY_DETECTED</text>
+    </g>
+</svg>
 
-        function stopDrag() {
-            selectedElement = null;
+<script>
+    function updateArrow() {
+        const idle = document.getElementById("idle");
+        const happy = document.getElementById("happy");
+        const arrow = document.getElementById("arrow1");
+        const arrowhead = document.getElementById("arrowhead1");
+        const text = document.getElementById("text1");
+
+        const idleX = parseFloat(idle.getAttribute("cx"));
+        const idleY = parseFloat(idle.getAttribute("cy")) + parseFloat(idle.getAttribute("ry"));
+
+        const happyX = parseFloat(happy.getAttribute("cx"));
+        const happyY = parseFloat(happy.getAttribute("cy")) - parseFloat(happy.getAttribute("ry"));
+
+        // Update the arrow line
+        arrow.setAttribute("x1", idleX);
+        arrow.setAttribute("y1", idleY);
+        arrow.setAttribute("x2", happyX);
+        arrow.setAttribute("y2", happyY);
+
+        // Update the arrowhead
+        arrowhead.setAttribute("points", `${happyX - 5},${happyY} ${happyX + 5},${happyY} ${happyX},${happyY + 10}`);
+
+        // Update text position
+        text.setAttribute("x", (idleX + happyX) / 2 + 10);
+        text.setAttribute("y", (idleY + happyY) / 2);
+    }
+
+    // Dragging functionality
+    let selectedElement = null;
+    let offsetX, offsetY;
+
+    function startDrag(event) {
+        if (event.target.tagName === "ellipse" || event.target.tagName === "text") {
+            selectedElement = event.target.parentNode.querySelector("ellipse");
+            const cx = parseFloat(selectedElement.getAttribute("cx"));
+            const cy = parseFloat(selectedElement.getAttribute("cy"));
+            offsetX = event.clientX - cx;
+            offsetY = event.clientY - cy;
         }
-    </script>
+    }
+
+    function drag(event) {
+        if (selectedElement) {
+            const newCx = event.clientX - offsetX;
+            const newCy = event.clientY - offsetY;
+            selectedElement.setAttribute("cx", newCx);
+            selectedElement.setAttribute("cy", newCy);
+
+            // Move text inside the group
+            const textElement = selectedElement.parentNode.querySelector("text");
+            if (textElement) {
+                textElement.setAttribute("x", newCx - 15);
+                textElement.setAttribute("y", newCy + 5);
+            }
+
+            updateArrow();
+        }
+    }
+
+    function endDrag() {
+        selectedElement = null;
+    }
+
+    // Attach event listeners
+    document.querySelectorAll(".draggable").forEach(element => {
+        element.addEventListener("mousedown", startDrag);
+    });
+
+    document.addEventListener("mousemove", drag);
+    document.addEventListener("mouseup", endDrag);
+
+    // Initial arrow position
+    updateArrow();
+</script>
+
 </body>
 </html>
