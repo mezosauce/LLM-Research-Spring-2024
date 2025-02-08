@@ -22,6 +22,12 @@ svg {
 .clickable::after{
     border: 1px solid purple;
 }
+.sticky {
+    position: sticky;
+    top: 0; /* Sticks at the top when scrolling */
+    background-color: white;
+    z-index: 1000; /* Ensures it stays above other content */
+  }
 
 .menu {
     display: none;
