@@ -18,24 +18,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function drag(event) {
-        if (!selectedElement) return;
+   function drag(event) {
+    if (!selectedElement) return;
 
-        let newCx = event.clientX - offsetX;
-        let newCy = event.clientY - offsetY;
+    let newCx = event.clientX - offsetX;
+    let newCy = event.clientY - offsetY;
 
-        selectedElement.setAttribute("cx", newCx);
-        selectedElement.setAttribute("cy", newCy);
+    // Move the ellipse
+    selectedElement.setAttribute("cx", newCx);
+    selectedElement.setAttribute("cy", newCy);
 
-        // Move text inside the group
-        let textElement = selectedElement.parentNode.querySelector("text");
-        if (textElement) {
-            textElement.setAttribute("x", newCx - 15);
-            textElement.setAttribute("y", newCy + 5);
-        }
+    // Move the text inside the group
+    let textElement = selectedElement.parentNode.querySelector("text");
+    if (textElement) {
+        let textWidth = textElement.getBBox().width;
+        let textHeight = textElement.getBBox().height;
 
-        updateArrows(); // Ensure the arrows stick to elements
+        // Center the text properly inside the ellipse
+        textElement.setAttribute("x", newCx - textWidth / 2);
+        textElement.setAttribute("y", newCy + textHeight / 4);
     }
+
+    updateArrows(); // Ensure arrows stay connected properly
+}
 
     function endDrag() {
         document.removeEventListener("mousemove", drag);
