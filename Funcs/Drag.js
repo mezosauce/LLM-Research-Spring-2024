@@ -3,44 +3,56 @@ document.addEventListener("DOMContentLoaded", function () {
     let offsetX = 0, offsetY = 0;
 
     function startDrag(event) {
-        if (event.target.tagName === "ellipse" || event.target.tagName === "text") {
-            selectedElement = event.target.closest("g").querySelector("ellipse");
-            if (!selectedElement) return;
+        let targetGroup = event.target.closest("g");
+        if (!targetGroup) return;
 
-            let cx = parseFloat(selectedElement.getAttribute("cx"));
-            let cy = parseFloat(selectedElement.getAttribute("cy"));
+        selectedElement = targetGroup.querySelector("ellipse");
+        if (!selectedElement) return;
 
-            offsetX = event.clientX - cx;
-            offsetY = event.clientY - cy;
+        let svg = selectedElement.ownerSVGElement;
+        let point = svg.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        let transformedPoint = point.matrixTransform(svg.getScreenCTM().inverse());
 
-            document.addEventListener("mousemove", drag);
-            document.addEventListener("mouseup", endDrag);
+        let cx = parseFloat(selectedElement.getAttribute("cx"));
+        let cy = parseFloat(selectedElement.getAttribute("cy"));
+
+        // Calculate offset from where the user clicked
+        offsetX = transformedPoint.x - cx;
+        offsetY = transformedPoint.y - cy;
+
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", endDrag);
+    }
+
+    function drag(event) {
+        if (!selectedElement) return;
+
+        let svg = selectedElement.ownerSVGElement;
+        let point = svg.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        let transformedPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+
+        let newCx = transformedPoint.x - offsetX;
+        let newCy = transformedPoint.y - offsetY;
+
+        // Move the ellipse
+        selectedElement.setAttribute("cx", newCx);
+        selectedElement.setAttribute("cy", newCy);
+
+        // Move the text inside the group
+        let textElement = selectedElement.parentNode.querySelector("text");
+        if (textElement) {
+            textElement.setAttribute("x", newCx);
+            textElement.setAttribute("y", newCy);
+            textElement.setAttribute("dominant-baseline", "middle");
+            textElement.setAttribute("text-anchor", "middle");
         }
+
+        updateArrows();
     }
-
-   function drag(event) {
-    if (!selectedElement) return;
-
-    let newCx = event.clientX - offsetX;
-    let newCy = event.clientY - offsetY;
-
-    // Move the ellipse
-    selectedElement.setAttribute("cx", newCx);
-    selectedElement.setAttribute("cy", newCy);
-
-    // Move the text inside the group
-    let textElement = selectedElement.parentNode.querySelector("text");
-    if (textElement) {
-        let textWidth = textElement.getBBox().width;
-        let textHeight = textElement.getBBox().height;
-
-        // Center the text properly inside the ellipse
-        textElement.setAttribute("x", newCx - textWidth / 2);
-        textElement.setAttribute("y", newCy + textHeight / 4);
-    }
-
-    updateArrows(); // Ensure arrows stay connected properly
-}
 
     function endDrag() {
         document.removeEventListener("mousemove", drag);
@@ -69,14 +81,14 @@ document.addEventListener("DOMContentLoaded", function () {
         let tadaX = parseFloat(tada.getAttribute("cx"));
         let tadaY = parseFloat(tada.getAttribute("cy")) - parseFloat(tada.getAttribute("ry"));
 
-        // Update first arrow (Idle -> Happy Anniversary Detected)
+        // Update first arrow (Idle -> Happy)
         arrow1.setAttribute("x1", idleX);
         arrow1.setAttribute("y1", idleY);
         arrow1.setAttribute("x2", happyX);
         arrow1.setAttribute("y2", happyY);
         arrowhead1.setAttribute("points", `${happyX - 5},${happyY - 10} ${happyX + 5},${happyY - 10} ${happyX},${happyY}`);
 
-        // Update second arrow (Happy Anniversary Detected -> Tada Raining)
+        // Update second arrow (Happy -> Tada)
         arrow2.setAttribute("x1", happyX);
         arrow2.setAttribute("y1", happyY + 60);
         arrow2.setAttribute("x2", tadaX);
@@ -88,5 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
         element.addEventListener("mousedown", startDrag);
     });
 
-    updateArrows(); // Ensure arrows are initially positioned correctly
+    updateArrows(); // Ensure initial arrow positions are set correctly
 });
+
