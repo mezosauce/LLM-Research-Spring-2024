@@ -1,11 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
+    let contextMenu = document.getElementById("contextMenu");
+    let selectedElements = new Set(); // Store multiple selected elements
     let selectionBox = null;
     let startX = 0, startY = 0;
-    let selectedElements = new Set();
     let isDragging = false;
 
+    // Function to toggle selection for a single element
+    function highlightElement(element) {
+        if (selectedElements.has(element)) {
+            // If already selected, remove it
+            element.classList.remove("selected");
+            selectedElements.delete(element);
+        } else {
+            // Add new selection
+            element.classList.add("selected");
+            selectedElements.add(element);
+        }
+    }
+
+    // Function to start a group selection box
     function startSelection(event) {
-        if (event.target.tagName !== "svg") return; // Only start on empty SVG space
+        if (event.target.tagName !== "svg") return; // Start selection only on empty space
 
         let svg = event.target;
         let point = svg.createSVGPoint();
@@ -17,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         startY = transformedPoint.y;
         isDragging = true;
 
-        // Create the selection box
+        // Create selection box
         selectionBox = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         selectionBox.setAttribute("x", startX);
         selectionBox.setAttribute("y", startY);
@@ -63,23 +78,20 @@ document.addEventListener("DOMContentLoaded", function () {
         let height = parseFloat(selectionBox.getAttribute("height"));
 
         let svg = selectionBox.ownerSVGElement;
-        let elements = svg.querySelectorAll("ellipse"); // Adjust for other elements if needed
+        let elements = svg.querySelectorAll(".clickable"); // Selectable elements
 
-        selectedElements.clear();
+        selectedElements.clear(); // Reset selection
         elements.forEach(el => {
-            let cx = parseFloat(el.getAttribute("cx"));
-            let cy = parseFloat(el.getAttribute("cy"));
-            let rx = parseFloat(el.getAttribute("rx"));
-            let ry = parseFloat(el.getAttribute("ry"));
+            let bbox = el.getBBox();
+            let elX = bbox.x + bbox.width / 2;
+            let elY = bbox.y + bbox.height / 2;
 
-            // Check if the ellipse center is inside the selection box
-            if (cx >= x && cx <= x + width && cy >= y && cy <= y + height) {
+            // Check if element is inside the selection box
+            if (elX >= x && elX <= x + width && elY >= y && elY <= y + height) {
                 selectedElements.add(el);
-                el.setAttribute("stroke", "red");
-                el.setAttribute("stroke-width", "2");
+                el.classList.add("selected");
             } else {
-                el.removeAttribute("stroke");
-                el.removeAttribute("stroke-width");
+                el.classList.remove("selected");
             }
         });
 
@@ -88,6 +100,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.removeEventListener("mousemove", updateSelectionBox);
         document.removeEventListener("mouseup", endSelection);
+    }
+
+    // Single element selection (left-click)
+    document.querySelectorAll(".clickable").forEach(element => {
+        element.addEventListener("click", function (event) {
+            if (!isDragging) { // Prevent interference with group selection
+                const targetElement = getTargetGroup(event);
+                if (targetElement) {
+                    highlightElement(targetElement);
+                }
+            }
+        });
+    });
+
+    // Right-click: Highlight & show context menu
+    document.querySelectorAll(".clickable").forEach(element => {
+        element.addEventListener("contextmenu", function (event) {
+            event.preventDefault();
+
+            let targetGroup = event.target.closest("g");
+            if (!targetGroup) return;
+
+            if (!selectedElements.has(targetGroup)) {
+                highlightElement(targetGroup);
+            }
+
+            // Show context menu
+            contextMenu.style.display = "block";
+            contextMenu.style.left = event.pageX + "px";
+            contextMenu.style.top = event.pageY + "px";
+
+            contextMenu.dataset.targetId = targetGroup.id;
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".menu") && !event.target.closest(".clickable")) {
+            closeMenu();
+        }
+    });
+
+    function closeMenu() {
+        contextMenu.style.display = "none";
+    }
+
+    function getTargetGroup(event) {
+        let target = event.target;
+
+        // Traverse up until we find a <g> element
+        while (target && target.tagName !== "g" && target.tagName !== "svg") {
+            target = target.parentNode;
+        }
+
+        return target.tagName === "g" ? target : null;
     }
 
     document.querySelector("svg").addEventListener("mousedown", startSelection);
