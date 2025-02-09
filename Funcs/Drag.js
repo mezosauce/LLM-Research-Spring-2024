@@ -84,12 +84,32 @@ document.addEventListener("DOMContentLoaded", function () {
         let tadaX = parseFloat(tada.getAttribute("cx"));
         let tadaY = parseFloat(tada.getAttribute("cy")) - parseFloat(tada.getAttribute("ry"));
     
+        // Function to calculate the angle between two points
+        function getAngle(x1, y1, x2, y2) {
+            return Math.atan2(y2 - y1, x2 - x1);
+        }
+    
+        // Function to update arrowhead based on angle
+        function updateArrowhead(arrowhead, startX, startY, endX, endY) {
+            let angle = getAngle(startX, startY, endX, endY);
+            let arrowLength = 10; // Length of the arrowhead
+            let arrowWidth = 5;   // Width of the arrowhead
+    
+            let x1 = endX - arrowLength * Math.cos(angle - Math.PI / 6);
+            let y1 = endY - arrowLength * Math.sin(angle - Math.PI / 6);
+    
+            let x2 = endX - arrowLength * Math.cos(angle + Math.PI / 6);
+            let y2 = endY - arrowLength * Math.sin(angle + Math.PI / 6);
+    
+            arrowhead.setAttribute("points", `${endX},${endY} ${x1},${y1} ${x2},${y2}`);
+        }
+    
         // Update first arrow (Idle -> Happy)
         arrow1.setAttribute("x1", idleX);
         arrow1.setAttribute("y1", idleY);
         arrow1.setAttribute("x2", happyX);
         arrow1.setAttribute("y2", happyY);
-        arrowhead1.setAttribute("points", `${happyX - 5},${happyY - 10} ${happyX + 5},${happyY - 10} ${happyX},${happyY}`);
+        updateArrowhead(arrowhead1, idleX, idleY, happyX, happyY);
     
         // Position the text for arrow 1 at the midpoint
         let midX1 = ((idleX + happyX) / 2) + 10;
@@ -101,8 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
         arrow2.setAttribute("x1", happyX);
         arrow2.setAttribute("y1", happyY + 60); // Adjusted for better visual alignment
         arrow2.setAttribute("x2", tadaX);
-        arrow2.setAttribute("y2", tadaY - 5);
-        arrowhead2.setAttribute("points", `${tadaX - 5},${tadaY - 10} ${tadaX + 5},${tadaY - 10} ${tadaX},${tadaY}`);
+        arrow2.setAttribute("y2", tadaY );
+        updateArrowhead(arrowhead2, happyX, happyY + 60, tadaX, tadaY );
     
         // Position the text for arrow 2 at the midpoint
         let midX2 = ((happyX + tadaX) / 2) + 10;
@@ -110,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
         text2.setAttribute("x", midX2);
         text2.setAttribute("y", midY2);
     }
+    
     
 
     document.querySelectorAll(".clickable").forEach(element => {
