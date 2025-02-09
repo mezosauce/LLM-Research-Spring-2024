@@ -9,8 +9,8 @@ body {
     display: block;
     justify-content: center;
     align-items: center;
-    width: 90vw; /* Make it responsive */
-    height: 60vh;
+    width: 100vw; /* Make it responsive */
+    height: 70vh;
 }
 
 svg {
