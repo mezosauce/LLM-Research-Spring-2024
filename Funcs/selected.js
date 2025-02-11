@@ -24,9 +24,15 @@ function highlightElement(element) {
 // Left-click: Toggle highlight
 document.querySelectorAll(".clickable").forEach(element => {
     element.addEventListener("click", function(event) {
-        const targetElement = getTargetGroup(event); // Ensure we highlight the group
+        event.stopPropagation(); // Prevent event bubbling issues
+        console.log("Clicked element:", event.target);
+
+        const targetElement = getTargetGroup(event);
         if (targetElement) {
+            console.log("Target group found:", targetElement.id);
             highlightElement(targetElement);
+        } else {
+            console.log("No target group found.");
         }
     });
 });
@@ -34,21 +40,21 @@ document.querySelectorAll(".clickable").forEach(element => {
 // Right-click: Always highlight and show context menu
 document.querySelectorAll(".clickable").forEach(element => {
     element.addEventListener("contextmenu", function(event) {
-        event.preventDefault();
+        event.preventDefault(); // Prevent default right-click behavior
 
-        let targetGroup = event.target.closest("g");
+        const targetGroup = getTargetGroup(event);
         if (!targetGroup) return;
 
         if (selectedElement !== targetGroup) {
             highlightElement(targetGroup);
         }
 
-        // Show the menu at the cursor position
+        // Show context menu at cursor position
         contextMenu.style.display = "block";
         contextMenu.style.left = event.pageX + "px";
         contextMenu.style.top = event.pageY + "px";
 
-        // Store selected element
+        // Store selected element ID
         contextMenu.dataset.targetId = targetGroup.id;
     });
 });
@@ -67,11 +73,13 @@ function closeMenu() {
 function getTargetGroup(event) {
     let target = event.target;
 
-    // Traverse up until we find a <g> element
+    // Traverse up to find a parent <g> element
     while (target && target.tagName !== "g" && target.tagName !== "svg") {
         target = target.parentNode;
     }
 
-    // Return null if we reach the SVG root without finding a <g>
+    console.log("getTargetGroup detected:", target ? target.id : "No group found");
+
     return target.tagName === "g" ? target : null;
 }
+
