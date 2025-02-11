@@ -3,19 +3,20 @@ let selectedElement = null;
 
 // Function to highlight a new element and deselect the previous one
 function highlightElement(element) {
-    // Deselect previous selection if it exists and is different from the new selection
-    if (selectedElement && selectedElement !== element) {
-        console.log("Deselecting previous:", selectedElement);
-        selectedElement.classList.remove("selected");
-    }
-
-    // Toggle selection for the clicked element
-    if (selectedElement === element) {
-        console.log("Deselecting:", element);
+    if (selectedElement === element && selectedElement !== element) {
+        // If clicking the same element, unhighlight it
+        console.log("DEEEEHighlighting (removing from):", element);
         element.classList.remove("selected");
         selectedElement = null;
     } else {
-        console.log("Selecting:", element);
+        // Deselect previous element (if any)
+        if (selectedElement ) {
+            console.log("DEEEEHighlighting (removing from):", selectedElement);
+            selectedElement.classList.remove("selected");
+        }
+
+        // Highlight the new element
+        console.log("Highlighting:", element);
         element.classList.add("selected");
         selectedElement = element;
     }
