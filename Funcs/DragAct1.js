@@ -1,71 +1,61 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const svg = document.querySelector("svg");
     let selectedElement = null;
     let offset = { x: 0, y: 0 };
+    const svg = document.querySelector("svg");
 
-    function getMousePosition(evt) {
-        const CTM = svg.getScreenCTM();
-        return {
-            x: (evt.clientX - CTM.e) / CTM.a,
-            y: (evt.clientY - CTM.f) / CTM.d
-        };
-    }
-
-    function startDrag(evt) {
-        if (evt.target.tagName === "ellipse") {
-            selectedElement = evt.target;
-            const mousePos = getMousePosition(evt);
-            offset.x = mousePos.x - selectedElement.cx.baseVal.value;
-            offset.y = mousePos.y - selectedElement.cy.baseVal.value;
+    function onMouseDown(event) {
+        if (event.target.tagName === "ellipse") {
+            selectedElement = event.target;
+            let bbox = selectedElement.getBBox();
+            offset.x = event.clientX - bbox.x - bbox.width / 2;
+            offset.y = event.clientY - bbox.y - bbox.height / 2;
         }
     }
 
-    function drag(evt) {
+    function onMouseMove(event) {
         if (selectedElement) {
-            const mousePos = getMousePosition(evt);
-            selectedElement.cx.baseVal.value = mousePos.x - offset.x;
-            selectedElement.cy.baseVal.value = mousePos.y - offset.y;
+            let newX = event.clientX - offset.x;
+            let newY = event.clientY - offset.y;
+            let bbox = svg.viewBox.baseVal;
+            
+            // Restrict movement within SVG boundaries
+            newX = Math.max(bbox.x + 50, Math.min(newX, bbox.x + bbox.width - 50));
+            newY = Math.max(bbox.y + 25, Math.min(newY, bbox.y + bbox.height - 25));
+            
+            selectedElement.setAttribute("cx", newX);
+            selectedElement.setAttribute("cy", newY);
             updateArrows();
         }
     }
 
-    function endDrag() {
+    function onMouseUp() {
         selectedElement = null;
     }
 
     function updateArrows() {
-        const connections = [
-            { from: "idle", to: "memberJoined", arrow: "arrowGroup1" },
-            { from: "memberJoined", to: "reactionAdded", arrow: "arrowGroup2" },
-            { from: "memberJoined", to: "userTagged", arrow: "arrowGroup3" },
-            { from: "memberJoined", to: "responseAdded", arrow: "arrowGroup4" },
-            { from: "reactionAdded", to: "idle", arrow: "arrowGroup5" },
-            { from: "responseAdded", to: "idle", arrow: "arrowGroup6" }
-        ];
-
-        connections.forEach(({ from, to, arrow }) => {
-            const fromEl = document.getElementById(from);
-            const toEl = document.getElementById(to);
-            const line = document.querySelector(`#${arrow} line`);
-            const polygon = document.querySelector(`#${arrow} polygon`);
-            
-            if (fromEl && toEl && line && polygon) {
-                line.setAttribute("x1", fromEl.cx.baseVal.value);
-                line.setAttribute("y1", fromEl.cy.baseVal.value + 25);
-                line.setAttribute("x2", toEl.cx.baseVal.value);
-                line.setAttribute("y2", toEl.cy.baseVal.value - 25);
-                
-                polygon.setAttribute("points", `
-                    ${toEl.cx.baseVal.value - 5},${toEl.cy.baseVal.value - 25} 
-                    ${toEl.cx.baseVal.value + 5},${toEl.cy.baseVal.value - 25} 
-                    ${toEl.cx.baseVal.value},${toEl.cy.baseVal.value - 15}
-                `);
+        const arrows = document.querySelectorAll("line, polygon, path");
+        arrows.forEach((arrow) => {
+            let fromId = arrow.dataset.from;
+            let toId = arrow.dataset.to;
+            if (fromId && toId) {
+                let from = document.getElementById(fromId);
+                let to = document.getElementById(toId);
+                if (from && to) {
+                    let fromX = from.getAttribute("cx");
+                    let fromY = from.getAttribute("cy");
+                    let toX = to.getAttribute("cx");
+                    let toY = to.getAttribute("cy");
+                    
+                    arrow.setAttribute("x1", fromX);
+                    arrow.setAttribute("y1", fromY);
+                    arrow.setAttribute("x2", toX);
+                    arrow.setAttribute("y2", toY);
+                }
             }
         });
     }
 
-    svg.addEventListener("mousedown", startDrag);
-    svg.addEventListener("mousemove", drag);
-    svg.addEventListener("mouseup", endDrag);
-    svg.addEventListener("mouseleave", endDrag);
+    svg.addEventListener("mousedown", onMouseDown);
+    svg.addEventListener("mousemove", onMouseMove);
+    svg.addEventListener("mouseup", onMouseUp);
 });
