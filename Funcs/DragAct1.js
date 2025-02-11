@@ -61,5 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let idle = document.getElementById("idle");
         let memberJoined = document.getElementsById("memberJoined");
         let reactionAdded = document.getElementById("reactionAdded");
-        let 
+        let userTagged = document.getElementById("userTagged");
+        let responseAdded = document.getElementById("responseAdded");
+        
     }
