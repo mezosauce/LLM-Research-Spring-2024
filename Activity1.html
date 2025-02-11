@@ -27,28 +27,28 @@
                         <!-- Idle State -->
                         <g class="clickable">
                             <ellipse id="idle"  cx="300" cy="50" rx="50" ry="25" stroke="black" fill="white"/>
-                            <text x="287" y="55" font-size="12" >Idle</text>
+                            <text x="287" y="55" font-size="12" ondblclick="editText(event)">Idle</text>
                         </g>
 
                         <g id="arrowGroup1" class="clickable">
-                            <line x1="300" y1="75" x2="300" y2="100" stroke="black"/>
-                            <polygon points="295,100 305,100 300,110" fill="black"/>
-                            <text x="310" y="90" font-size="12">User Joins</text>
+                            <line id = "arrow1"x1="300" y1="75" x2="300" y2="100" stroke="black"/>
+                            <polygon id = "arrowhead1" points="295,100 305,100 300,110" fill="black"/>
+                            <text id = "text1" x="310" y="90" font-size="12" ondblclick="editText(event)">User Joins</text>
                         </g>
 
 
                         <!-- Member Joined State -->
                         <g class="clickable">
                             <ellipse id="memberJoined"  cx="300" cy="140" rx="90" ry="30" stroke="black" fill="white"/>
-                            <text x="255" y="140" font-size="12" >Member Joined</text>
+                            <text x="255" y="140" font-size="12" ondblclick="editText(event)" >Member Joined</text>
                         </g>
 
 
                         
                         <g id="arrowGroup2" class="clickable">
-                            <line x1="210" y1="140" x2="150" y2="230" stroke="black"/>
-                            <polygon points="160,225 150,220 150,230" fill="black"/>
-                            <text x="125" y="180" font-size="12" transform="rotate(-55, 190, 160)">Reaction Added</text>
+                            <line id = "arrow2"x1="210" y1="140" x2="150" y2="230" stroke="black"/>
+                            <polygon id="arrowhead2" points="160,225 150,220 150,230" fill="black"/>
+                            <text id="text2" x="125" y="180" font-size="12" transform="rotate(-55, 190, 160)" ondblclick="editText(event)">Reaction Added</text>
                         </g>
 
                         <!-- Reaction Added State -->
