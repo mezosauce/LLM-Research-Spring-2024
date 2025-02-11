@@ -1,72 +1,52 @@
 document.addEventListener("DOMContentLoaded", function () {
     let selectedElement = null;
     let offset = { x: 0, y: 0 };
-    let svg = document.querySelector("svg");
-    let svgRect = svg.getBoundingClientRect();
-    
-    function getMousePosition(evt) {
-        return {
-            x: evt.clientX - svgRect.left,
-            y: evt.clientY - svgRect.top
-        };
+
+    document.querySelectorAll(".clickable").forEach((group) => {
+        group.addEventListener("mousedown", startDrag);
+    });
+
+    function startDrag(event) {
+        let targetGroup = event.target.closest("g");
+        if (!targetGroup) return;
+
+        selectedElement = targetGroup;
+        let svg = selectedElement.closest("svg");
+
+        // Get the initial mouse position relative to the SVG
+        let pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+        let transformedPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+
+        // Extract the current transform or set a new one
+        let transform = selectedElement.transform.baseVal.consolidate();
+        let matrix = transform ? transform.matrix : svg.createSVGMatrix();
+        offset.x = transformedPt.x - matrix.e;
+        offset.y = transformedPt.y - matrix.f;
+
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", endDrag);
     }
 
-    function startDrag(evt) {
-        if (evt.target.tagName === "ellipse") {
-            selectedElement = evt.target;
-            let position = getMousePosition(evt);
-            let cx = parseFloat(selectedElement.getAttribute("cx"));
-            let cy = parseFloat(selectedElement.getAttribute("cy"));
-            offset.x = position.x - cx;
-            offset.y = position.y - cy;
-        }
-    }
+    function drag(event) {
+        if (!selectedElement) return;
 
-    function drag(evt) {
-        if (selectedElement) {
-            let position = getMousePosition(evt);
-            let newX = position.x - offset.x;
-            let newY = position.y - offset.y;
-            
-            // Ensure the element stays within bounds
-            let rx = parseFloat(selectedElement.getAttribute("rx"));
-            let ry = parseFloat(selectedElement.getAttribute("ry"));
-            let minX = rx;
-            let maxX = 600 - rx;
-            let minY = ry;
-            let maxY = 300 - ry;
-            
-            newX = Math.max(minX, Math.min(maxX, newX));
-            newY = Math.max(minY, Math.min(maxY, newY));
-            
-            selectedElement.setAttribute("cx", newX);
-            selectedElement.setAttribute("cy", newY);
-            updateConnections(selectedElement.id, newX, newY);
-        }
+        let svg = selectedElement.closest("svg");
+        let pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+        let transformedPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+
+        let newX = transformedPt.x - offset.x;
+        let newY = transformedPt.y - offset.y;
+
+        selectedElement.setAttribute("transform", `translate(${newX}, ${newY})`);
     }
 
     function endDrag() {
+        document.removeEventListener("mousemove", drag);
+        document.removeEventListener("mouseup", endDrag);
         selectedElement = null;
     }
-
-    function updateConnections(id, x, y) {
-        let arrows = document.querySelectorAll("line, path");
-        arrows.forEach(arrow => {
-            if (arrow.id.includes(id)) {
-                let points = arrow.getAttribute("points");
-                if (points) {
-                    let coords = points.split(" ").map(p => p.split(",").map(Number));
-                    arrow.setAttribute("points", `${x},${y} ${coords[1][0]},${coords[1][1]}`);
-                } else {
-                    arrow.setAttribute("x1", x);
-                    arrow.setAttribute("y1", y);
-                }
-            }
-        });
-    }
-
-    svg.addEventListener("mousedown", startDrag);
-    svg.addEventListener("mousemove", drag);
-    svg.addEventListener("mouseup", endDrag);
-    svg.addEventListener("mouseleave", endDrag);
 });
