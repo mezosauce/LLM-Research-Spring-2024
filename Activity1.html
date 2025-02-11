@@ -22,49 +22,60 @@
             <div class="Demonstration">
                 <div id="TestGraph">
                     <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet">
+
+
                         <!-- Idle State -->
                         <g class="clickable">
-                        <ellipse id="idle"  cx="300" cy="50" rx="50" ry="25" stroke="black" fill="white"/>
-                        <text x="287" y="55" font-size="12" >Idle</text>
+                            <ellipse id="idle"  cx="300" cy="50" rx="50" ry="25" stroke="black" fill="white"/>
+                            <text x="287" y="55" font-size="12" >Idle</text>
                         </g>
-                        <!-- Member Joined State -->
-                        <g class="clickable">
-                        <ellipse id="memberJoined"  cx="300" cy="140" rx="90" ry="30" stroke="black" fill="white"/>
-                        <text x="255" y="140" font-size="12" >Member Joined</text>
-                        </g>
-                        <!-- Reaction Added State -->
-                        <g class="clickable">
-                        <ellipse id="reactionAdded" cx="100" cy="250" rx="80" ry="25" stroke="black" fill="white"/>
-                        <text x="60" y="255" font-size="12">Reaction Added</text>
-                        </g>
-                        <!-- User Tagged State -->
-                        <g class="clickable">
-                        <ellipse id="userTagged" cx="300" cy="255" rx="80" ry="25" stroke="black" fill="white"/>
-                        <text x="270" y="260" font-size="12">User Tagged</text>
-                        </g>
-                        <!-- Response Added State -->
-                        <g class="clickable">
-                        <ellipse id="responseAdded" cx="540" cy="250" rx="80" ry="25" stroke="black" fill="white"/>
-                        <text x="495" y="255" font-size="12">Response Added</text>
-                        </g>
-                        <!-- Arrows and Labels -->
+
                         <g id="arrowGroup1" class="clickable">
                             <line x1="300" y1="75" x2="300" y2="100" stroke="black"/>
                             <polygon points="295,100 305,100 300,110" fill="black"/>
                             <text x="310" y="90" font-size="12">User Joins</text>
                         </g>
-                    
+
+
+                        <!-- Member Joined State -->
+                        <g class="clickable">
+                            <ellipse id="memberJoined"  cx="300" cy="140" rx="90" ry="30" stroke="black" fill="white"/>
+                            <text x="255" y="140" font-size="12" >Member Joined</text>
+                        </g>
+
+
+                        
                         <g id="arrowGroup2" class="clickable">
                             <line x1="210" y1="140" x2="150" y2="230" stroke="black"/>
                             <polygon points="160,225 150,220 150,230" fill="black"/>
                             <text x="125" y="180" font-size="12" transform="rotate(-55, 190, 160)">Reaction Added</text>
                         </g>
-                    
+
+                        <!-- Reaction Added State -->
+                        <g class="clickable">
+                            <ellipse id="reactionAdded" cx="100" cy="250" rx="80" ry="25" stroke="black" fill="white"/>
+                            <text x="60" y="255" font-size="12">Reaction Added</text>
+                        </g>
+
                         <g id="arrowGroup3" class="clickable">
                             <line x1="300" y1="170" x2="300" y2="220" stroke="black"/>
                             <polygon points="295,220 305,220 300,230" fill="black"/>
                             <text x="310" y="205" font-size="12">User Tagged</text>
                         </g>
+
+                        <!-- User Tagged State -->
+                        <g class="clickable">
+                            <ellipse id="userTagged" cx="300" cy="255" rx="80" ry="25" stroke="black" fill="white"/>
+                            <text x="270" y="260" font-size="12">User Tagged</text>
+                        </g>
+
+
+                        <!-- Response Added State -->
+                        <g class="clickable">
+                            <ellipse id="responseAdded" cx="540" cy="250" rx="80" ry="25" stroke="black" fill="white"/>
+                            <text x="495" y="255" font-size="12">Response Added</text>
+                        </g>
+                        
                     
                         <g id="arrowGroup4" class="clickable">
                             <line x1="390" y1="140" x2="470" y2="220" stroke="black"/>
@@ -85,10 +96,11 @@
                             <text x="360" y="145" font-size="12" transform="rotate(40, 420, 180)">Response Removed</text>
                         </g>
                         
-                        <path d="M 380 255 C 750 120, 300 30, 360 60" stroke="black" fill="transparent" stroke-width="2" class="clickable"/>
-                        <polygon points="350,35 345,40 380,55" fill="black" class="clickable"/>
-                        <text x="480" y="90" font-size="14" class="clickable">Tag Removed</text>
-                        
+                        <g class="clickable" id="ArrowGroup7">
+                            <path d="M 380 255 C 750 120, 320 20, 360 40" stroke="black" fill="transparent" stroke-width="2" class="clickable"/>
+                            <polygon points="370,30 345,40 370,50" fill="black" class="clickable"/>
+                            <text x="480" y="90" font-size="14" class="clickable">Tag Removed</text>
+                        </g>                        
                         
                     </svg>
 
@@ -102,5 +114,20 @@
             </div>
         </div>
     <script src="Funcs/EditText.js"></script>
+    <script>document.querySelectorAll(".clickable").forEach(element => {
+        element.addEventListener("click", function(event) {
+            console.log("Clicked element:", event.target);
+            const targetElement = getTargetGroup(event); 
+            if (targetElement) {
+                console.log("Target group found:", targetElement.id);
+                highlightElement(targetElement);
+            } else {
+                console.log("No target group found.");
+            }
+        });
+    });</script>
+    <script src="Funcs/selected.js"></script>
+    <script src="Funcs/GroupSelect.js"></script>
+    
     </body>
 </html>
