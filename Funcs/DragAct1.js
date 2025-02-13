@@ -10,16 +10,14 @@ document.addEventListener("DOMContentLoaded", function () {
         let targetGroup = event.target.closest("g");
         if (!targetGroup) return;
 
-        selectedElement = targetGroup;
+        selectedElement = targetsGroup;
         let svg = selectedElement.closest("svg");
 
-        // Get the initial mouse position relative to the SVG
         let pt = svg.createSVGPoint();
         pt.x = event.clientX;
         pt.y = event.clientY;
         let transformedPt = pt.matrixTransform(svg.getScreenCTM().inverse());
 
-        // Extract the current transform or set a new one
         let transform = selectedElement.transform.baseVal.consolidate();
         let matrix = transform ? transform.matrix : svg.createSVGMatrix();
         offset.x = transformedPt.x - matrix.e;
@@ -52,16 +50,5 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedElement = null;
     }
 
-     // Function to calculate the angle between two points
-     function getAngle(x1, y1, x2, y2) {
-        return Math.atan2(y2 - y1, x2 - x1);
-    }
-
-    function updateArrows() {
-        let idle = document.getElementById("idle");
-        let memberJoined = document.getElementsById("memberJoined");
-        let reactionAdded = document.getElementById("reactionAdded");
-        let userTagged = document.getElementById("userTagged");
-        let responseAdded = document.getElementById("responseAdded");
-        
-    }
+    
+});
