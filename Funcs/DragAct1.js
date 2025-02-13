@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let targetGroup = event.target.closest("g");
         if (!targetGroup) return;
 
-        selectedElement = targetsGroup;
+        selectedElement = targetGroup;
         let svg = selectedElement.closest("svg");
 
         let pt = svg.createSVGPoint();
