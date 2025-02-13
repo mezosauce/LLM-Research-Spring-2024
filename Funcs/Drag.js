@@ -93,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
         function updateArrowhead(arrowhead, startX, startY, endX, endY) {
             let angle = getAngle(startX, startY, endX, endY);
             let arrowLength = 10; // Length of the arrowhead
-            let arrowWidth = 5;   // Width of the arrowhead
     
             let x1 = endX - arrowLength * Math.cos(angle - Math.PI / 6);
             let y1 = endY - arrowLength * Math.sin(angle - Math.PI / 6);
