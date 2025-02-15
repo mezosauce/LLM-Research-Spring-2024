@@ -37,14 +37,36 @@ function traceElement() {
     // Remove previous highlights
     document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
 
-    let tracedElements = [];
+    let tracedGroups = new Set();
 
-    // If an arrow (line or polygon) is selected
-    if (window.selectedElement.tagName === 'line' || window.selectedElement.tagName === 'polygon') {
-        let parentGroup = window.selectedElement.closest('g'); // Get arrow's group
+    // Identify if the selected element is a node (ellipse) or an arrow (line)
+    let selectedTag = window.selectedElement.tagName.toLowerCase();
+    let selectedGroup = window.selectedElement.closest('g'); // Find the parent group
 
-        if (parentGroup) {
-            let arrow = parentGroup.querySelector('line'); // Find the line inside group
+    if (selectedGroup) {
+        tracedGroups.add(selectedGroup); // Always highlight the selected group itself
+    }
+
+        // Node selected: Find connected arrow groups
+        let cx = parseFloat(window.selectedElement.getAttribute("cx"));
+        let cy = parseFloat(window.selectedElement.getAttribute("cy"));
+
+        document.querySelectorAll('line').forEach(arrow => {
+            let x1 = parseFloat(arrow.getAttribute("x1"));
+            let y1 = parseFloat(arrow.getAttribute("y1"));
+            let x2 = parseFloat(arrow.getAttribute("x2"));
+            let y2 = parseFloat(arrow.getAttribute("y2"));
+
+            if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
+                let arrowGroup = arrow.closest('g');
+                if (arrowGroup) tracedGroups.add(arrowGroup);
+            }
+        });
+
+    } else if (selectedTag === 'line' || selectedTag === 'polygon') {
+        // Arrow selected: Find connected node groups
+        if (selectedGroup) {
+            let arrow = selectedGroup.querySelector('line'); // Find the main line
             if (arrow) {
                 let x1 = parseFloat(arrow.getAttribute("x1"));
                 let y1 = parseFloat(arrow.getAttribute("y1"));
@@ -56,45 +78,23 @@ function traceElement() {
                     let cy = parseFloat(node.getAttribute("cy"));
 
                     if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
-                        tracedElements.push(node);
+                        let nodeGroup = node.closest('g');
+                        if (nodeGroup) tracedGroups.add(nodeGroup);
                     }
                 });
-
-                tracedElements.push(arrow); // Highlight the arrow itself
             }
         }
+    } else {
+        alert("Selected element is not traceable.");
+        return;
     }
 
-    // If a node (ellipse) is selected
-    if (window.selectedElement.tagName === 'ellipse') {
-        let cx = parseFloat(window.selectedElement.getAttribute("cx"));
-        let cy = parseFloat(window.selectedElement.getAttribute("cy"));
-
-        document.querySelectorAll('line').forEach(arrow => {
-            let x1 = parseFloat(arrow.getAttribute("x1"));
-            let y1 = parseFloat(arrow.getAttribute("y1"));
-            let x2 = parseFloat(arrow.getAttribute("x2"));
-            let y2 = parseFloat(arrow.getAttribute("y2"));
-
-            if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
-                tracedElements.push(arrow);
-                let arrowGroup = arrow.closest('g'); // Find the group
-                if (arrowGroup) {
-                    let arrowhead = arrowGroup.querySelector('polygon'); // Get arrowhead
-                    if (arrowhead) tracedElements.push(arrowhead);
-                }
-            }
-        });
-
-        tracedElements.push(window.selectedElement); // Highlight the node itself
-    }
-
-    // Apply highlighting effect
-    tracedElements.forEach(el => el.classList.add('highlight'));
+    // Apply highlighting effect to all connected groups
+    tracedGroups.forEach(group => group.classList.add('highlight'));
 
     // Provide feedback
-    if (tracedElements.length > 0) {
-        alert(`Traced ${tracedElements.length} connected elements.`);
+    if (tracedGroups.size > 0) {
+        alert(`Traced ${tracedGroups.size} connected elements.`);
     } else {
         alert("No connected elements found.");
     }
