@@ -27,6 +27,10 @@ document.querySelectorAll('.clickable').forEach(element => {
     });
 });
 
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // OPTION 2:: TRACE
 function traceElement() {
     if (!window.selectedElement) {
@@ -37,17 +41,20 @@ function traceElement() {
     // Remove previous highlights
     document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
 
-    let tracedGroups = new Set();
+    let selectedGroup = window.selectedElement.closest('g'); // Find the parent <g>
 
-    // Identify if the selected element is a node (ellipse) or an arrow (line)
-    let selectedTag = window.selectedElement.tagName.toLowerCase();
-    let selectedGroup = window.selectedElement.closest('g'); // Find the parent group
-
-    if (selectedGroup) {
-        tracedGroups.add(selectedGroup); // Always highlight the selected group itself
+    if (!selectedGroup) {
+        alert("No group detected for this element!");
+        return;
     }
 
-        // Node selected: Find connected arrow groups
+    let tracedGroups = new Set();
+    tracedGroups.add(selectedGroup); // Always highlight the selected group itself
+
+    let selectedTag = window.selectedElement.tagName.toLowerCase();
+
+    if (selectedTag === 'ellipse') {
+        // If a node (ellipse) is selected, find connected arrow groups
         let cx = parseFloat(window.selectedElement.getAttribute("cx"));
         let cy = parseFloat(window.selectedElement.getAttribute("cy"));
 
@@ -63,27 +70,22 @@ function traceElement() {
             }
         });
 
-    } else if (selectedTag === 'line' || selectedTag === 'polygon') {
-        // Arrow selected: Find connected node groups
-        if (selectedGroup) {
-            let arrow = selectedGroup.querySelector('line'); // Find the main line
-            if (arrow) {
-                let x1 = parseFloat(arrow.getAttribute("x1"));
-                let y1 = parseFloat(arrow.getAttribute("y1"));
-                let x2 = parseFloat(arrow.getAttribute("x2"));
-                let y2 = parseFloat(arrow.getAttribute("y2"));
+    } else if (selectedTag === 'line') {
+        // If an arrow (line) is selected, find connected nodes (ellipses)
+        let x1 = parseFloat(window.selectedElement.getAttribute("x1"));
+        let y1 = parseFloat(window.selectedElement.getAttribute("y1"));
+        let x2 = parseFloat(window.selectedElement.getAttribute("x2"));
+        let y2 = parseFloat(window.selectedElement.getAttribute("y2"));
 
-                document.querySelectorAll('ellipse').forEach(node => {
-                    let cx = parseFloat(node.getAttribute("cx"));
-                    let cy = parseFloat(node.getAttribute("cy"));
+        document.querySelectorAll('ellipse').forEach(node => {
+            let cx = parseFloat(node.getAttribute("cx"));
+            let cy = parseFloat(node.getAttribute("cy"));
 
-                    if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
-                        let nodeGroup = node.closest('g');
-                        if (nodeGroup) tracedGroups.add(nodeGroup);
-                    }
-                });
+            if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
+                let nodeGroup = node.closest('g');
+                if (nodeGroup) tracedGroups.add(nodeGroup);
             }
-        }
+        });
     } else {
         alert("Selected element is not traceable.");
         return;
@@ -99,3 +101,4 @@ function traceElement() {
         alert("No connected elements found.");
     }
 }
+
