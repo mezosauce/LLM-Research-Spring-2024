@@ -5,18 +5,15 @@ let selectedElement = null;
 function highlightElement(element) {
     if (selectedElement === element && selectedElement !== element) {
         // If clicking the same element, unhighlight it
-        console.log("DEEEEHighlighting (removing from):", element);
         element.classList.remove("selected");
         selectedElement = null;
     } else {
         // Deselect previous element (if any)
         if (selectedElement ) {
-            console.log("DEEEEHighlighting (removing from):", selectedElement);
             selectedElement.classList.remove("selected");
         }
 
         // Highlight the new element
-        console.log("Highlighting:", element);
         element.classList.add("selected");
         selectedElement = element;
     }
@@ -25,11 +22,9 @@ function highlightElement(element) {
 document.querySelectorAll(".clickable").forEach(element => {
     element.addEventListener("click", function(event) {
         event.stopPropagation(); // Prevent event bubbling issues
-        console.log("Clicked element:", event.target);
 
         const targetElement = getTargetGroup(event);
         if (targetElement) {
-            console.log("Target group found:", targetElement.id);
             highlightElement(targetElement);
         } else {
             console.log("No target group found.");
@@ -78,7 +73,6 @@ function getTargetGroup(event) {
         target = target.parentNode;
     }
 
-    console.log("getTargetGroup detected:", target ? target.id : "No group found");
 
     return target.tagName === "g" ? target : null;
 }
