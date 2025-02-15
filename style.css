@@ -13,8 +13,6 @@ body {
     height: 70vh;
 }
 
-
-
 svg {
     width: 100%; /* Make the SVG fill the container */
     height: 100%;
@@ -59,4 +57,14 @@ svg {
 }
 path {
     pointer-events: none; /* Prevents the path from capturing clicks */
+}
+.locked {
+    stroke: green;
+    cursor: not-allowed; /* Show a disabled cursor */
+    opacity: 0.7; /* Slight transparency to indicate it's locked */
+}
+.highlight {
+    stroke: red !important; /* Highlight arrows */
+    fill: yellow !important; /* Highlight nodes */
+    transition: 0.3s ease-in-out;
 }
