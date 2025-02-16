@@ -21,37 +21,39 @@
                 <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" >
 
                     <!-- IDLE State -->
-                    <g class="clickable" >
+                    <g class="clickable" id="NODE::idleGroup">
                         <ellipse id="idle" cx="200" cy="50" rx="40" ry="20" stroke="black" fill="white"/>
                         <text x="185" y="55" font-size="12" ondblclick="editText(event)">IDLE</text>
                         
                     </g>
                     <!--Happy Anniversersary ARROW-->      
-                    <g class="clickable " >
-                        <line id="arrow1" x1="200" y1="70" x2="200" y2="110" stroke="black"/>
+                    <g class="clickable " id="EDGE::arrowGroup1">
+                        <line id="arrow1" x1="200" y1="50" x2="200" y2="150" stroke="black"/>
                         <polygon id="arrowhead1" points="195,110 205,110 200,120" fill="black"/>
                         <text id="text1" x="210" y="100" font-size="12" ondblclick="editText(event)">Happy Anniversary</text>s
                     </g>
                     
                     <!-- HAPPY_ANNIVERSARY_DETECTED State -->
-                    <g class="clickable " id="happyGroup">
+                    <g class="clickable " id="NODE::happyGroup">
                         <ellipse id="happy" cx="200" cy="150" rx="120" ry="30" stroke="black" fill="white"/>
                         <text x="104" y="155" font-size="12" ondblclick="editText(event)">HAPPY_ANNIVERSARY_DETECTED</text>
                     </g>
 
+                    <!--Detect variation ARROW-->      
+                    <g class="clickable" id="EDGE::arrowGroup2">
+                        <line id="arrow2" x1="200" y1="150" x2="200" y2="245" stroke="black"/>
+                        <polygon id="arrowhead2" points="195,210 205,210 200,220" fill="black"/>
+                        <text id="text2" x="210" y="200" font-size="12" ondblclick="editText(event)">Detect variation</text>
+                    </g>
+
                     <!-- TADA_RAINING State -->
-                    <g id="tadaGroup" class="clickable">
+                    <g class="clickable" id="NODE::tadaGroup">
                         <ellipse id="tada" cx="200" cy="245" rx="80" ry="25" stroke="black" fill="white"/>
                         <text x="160" y="250" font-size="12" ondblclick="editText(event)">TADA_RAINING</text>
                         
                     </g>
 
-                    <!--Detect variation ARROW-->      
-                    <g class="clickable">
-                        <line id="arrow2" x1="200" y1="180" x2="200" y2="220" stroke="black"/>
-                        <polygon id="arrowhead2" points="195,210 205,210 200,220" fill="black"/>
-                        <text id="text2" x="210" y="200" font-size="12" ondblclick="editText(event)">Detect variation</text>
-                    </g>
+                    
                 </svg>
             </div>
         </div>
