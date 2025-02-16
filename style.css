@@ -65,6 +65,6 @@ path {
 }
 .highlight {
     stroke: red !important; /* Highlight arrows */
-    fill: yellow !important; /* Highlight nodes */
+    fill: blue !important; /* Highlight nodes */
     transition: 0.3s ease-in-out;
 }
