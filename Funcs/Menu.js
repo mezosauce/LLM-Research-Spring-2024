@@ -28,10 +28,28 @@ document.querySelectorAll('.clickable').forEach(element => {
 });
 
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // OPTION 2:: TRACE
+
+function showContextMenu(event) {
+    event.preventDefault(); // Prevent default right-click behavior
+
+    const contextMenu = document.getElementById("contextMenu");
+    if (!contextMenu) {
+        console.error("Context menu element not found.");
+        return;
+    }
+
+    // Show context menu at cursor position
+    contextMenu.style.display = "block";
+    contextMenu.style.left = event.pageX + "px";
+    contextMenu.style.top = event.pageY + "px";
+
+    // Store selected element ID
+    contextMenu.dataset.targetId = window.selectedElement.id;
+}
+
 function traceElement() {
     if (!window.selectedElement) {
         alert("No element selected!");
@@ -57,12 +75,14 @@ function traceElement() {
         // If a node (ellipse) is selected, find connected arrow groups
         let cx = parseFloat(window.selectedElement.getAttribute("cx"));
         let cy = parseFloat(window.selectedElement.getAttribute("cy"));
+        console.log(`Selected ellipse at (${cx}, ${cy})`);
 
         document.querySelectorAll('line').forEach(arrow => {
             let x1 = parseFloat(arrow.getAttribute("x1"));
             let y1 = parseFloat(arrow.getAttribute("y1"));
             let x2 = parseFloat(arrow.getAttribute("x2"));
             let y2 = parseFloat(arrow.getAttribute("y2"));
+            console.log(`Checking line from (${x1}, ${y1}) to (${x2}, ${y2})`);
 
             if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
                 let arrowGroup = arrow.closest('g');
@@ -76,10 +96,12 @@ function traceElement() {
         let y1 = parseFloat(window.selectedElement.getAttribute("y1"));
         let x2 = parseFloat(window.selectedElement.getAttribute("x2"));
         let y2 = parseFloat(window.selectedElement.getAttribute("y2"));
+        console.log(`Selected line from (${x1}, ${y1}) to (${x2}, ${y2})`);
 
         document.querySelectorAll('ellipse').forEach(node => {
             let cx = parseFloat(node.getAttribute("cx"));
             let cy = parseFloat(node.getAttribute("cy"));
+            console.log(`Checking ellipse at (${cx}, ${cy})`);
 
             if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
                 let nodeGroup = node.closest('g');
@@ -101,4 +123,3 @@ function traceElement() {
         alert("No connected elements found.");
     }
 }
-
