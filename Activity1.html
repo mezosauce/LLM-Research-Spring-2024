@@ -25,12 +25,12 @@
 
 
                         <!-- Idle State -->
-                        <g class="clickable">
+                        <g class="clickable" id="NODE::idleGroup">
                             <ellipse id="idle"  cx="300" cy="50" rx="50" ry="25" stroke="black" fill="white"/>
                             <text x="287" y="55" font-size="12" ondblclick="editText(event)">Idle</text>
                         </g>
 
-                        <g id="arrowGroup1" class="clickable">
+                        <g class="clickable" id="EDGE::arrowGroup1">
                             <line id = "arrow1"x1="300" y1="75" x2="300" y2="100" stroke="black"/>
                             <polygon id = "arrowhead1" points="295,100 305,100 300,110" fill="black"/>
                             <text id = "text1" x="310" y="90" font-size="12" ondblclick="editText(event)">User Joins</text>
@@ -38,65 +38,65 @@
 
 
                         <!-- Member Joined State -->
-                        <g class="clickable">
+                        <g class="clickable" id="NODE::memberJoinedGroup">
                             <ellipse id="memberJoined"  cx="300" cy="140" rx="90" ry="30" stroke="black" fill="white"/>
                             <text x="255" y="140" font-size="12" ondblclick="editText(event)" >Member Joined</text>
                         </g>
 
 
                         
-                        <g id="arrowGroup2" class="clickable">
+                        <g class="clickable" id="EDGE::arrowGroup2">
                             <line id = "arrow2" x1="210" y1="140" x2="150" y2="230" stroke="black"/>
                             <polygon id="arrowhead2" points="160,225 150,220 150,230" fill="black"/>
                             <text id="text2" x="125" y="180" font-size="12" transform="rotate(-55, 190, 160)" ondblclick="editText(event)">Reaction Added</text>
                         </g>
 
                         <!-- Reaction Added State -->
-                        <g class="clickable">
+                        <g class="clickable" id="NODE::reactionAddedGroup">
                             <ellipse id="reactionAdded" cx="100" cy="250" rx="80" ry="25" stroke="black" fill="white"/>
                             <text x="60" y="255" font-size="12" ondblclick="editText(event)">Reaction Added</text>
                         </g>
 
-                        <g id="arrowGroup3" class="clickable">
+                        <g class="clickable" id="EDGE::arrowGroup3">
                             <line id = "arrow3" x1="300" y1="170" x2="300" y2="220" stroke="black"/>
                             <polygon id= "arrowhead3" points="295,220 305,220 300,230" fill="black"/>
                             <text id="text3" x="310" y="205" font-size="12" ondblclick="editText(event)">User Tagged</text>
                         </g>
 
                         <!-- User Tagged State -->
-                        <g class="clickable">
+                        <g class="clickable" id="NODE::userTaggedGroup">
                             <ellipse id="userTagged" cx="300" cy="255" rx="80" ry="25" stroke="black" fill="white"/>
                             <text x="270" y="260" font-size="12" ondblclick="editText(event)">User Tagged</text>
                         </g>
 
 
                         <!-- Response Added State -->
-                        <g class="clickable">
+                        <g class="clickable" id="NODE::responseAddedGroup">
                             <ellipse id="responseAdded" cx="540" cy="250" rx="80" ry="25" stroke="black" fill="white"/>
                             <text x="495" y="255" font-size="12" ondblclick="editText(event)">Response Added</text>
                         </g>
                         
                     
-                        <g id="arrowGroup4" class="clickable">
+                        <g class="clickable" id="EDGE::arrowGroup4">
                             <line id= "arrow4" x1="390" y1="140" x2="470" y2="220" stroke="black"/>
                             <polygon id= "arrowhead4" points="465,225 475,215 480,230" fill="black"/>
                             <text id = "text4" x="380" y="190" font-size="12" transform="rotate(45, 420, 180)" ondblclick="editText(event)">Response Added</text>
                         </g>
                     
                     
-                        <g id="arrowGroup5" class="clickable">
+                        <g class="clickable" id="EDGE::arrowGroup5">
                             <line id="arrow5" x1="90" y1="225" x2="250" y2="50" stroke="black"/>
                             <polygon id="" points="230,55 245,70 250,50" fill="black"/>
                             <text x="130" y="155" font-size="12" transform="rotate(-45, 170, 140)" ondblclick="editText(event)">Reaction Removed</text>
                         </g>
                     
-                        <g id="arrowGroup6" class="clickable">
+                        <g class="clickable" id="EDGE::arrowGroup6">
                             <line id = "arrow6" x1="550" y1="225" x2="350" y2="50" stroke="black"/>
                             <polygon id = "arrowhead6" points="355,65 350,50 365,55" fill="black"/>
                             <text id= "text6" x="360" y="145" font-size="12" transform="rotate(40, 420, 180)" ondblclick="editText(event)">Response Removed</text>
                         </g>
                         
-                        <g class="clickable" id="ArrowGroup7" pointer-events="all">
+                        <g class="clickable" id="EDGE::ArrowGroup7" pointer-events="all">
                             <path id= "arrow7" d="M 380 255 C 750 120, 320 20, 360 40" stroke="black" fill="transparent" stroke-width="2" class="clickable"/>
                             <polygon id="arrowhead7"points="370,30 345,40 370,50" fill="black" class="clickable"/>
                             <text id = "text7" x="500" y="90" font-size="14" class="clickable" ondblclick="editText(event)">Tag Removed</text>
@@ -107,7 +107,7 @@
                     <!-- Context Menu -->
                     <div id="contextMenu" class="menu">
                         <button onclick="preserveElement()">Preserve</button>
-                        <button onclick="alert('Delete option clicked!')">Delete</button>
+                        <button onclick="traceElement()">Trace</button>
                         <button onclick="closeMenu()">Close</button>
                     </div>
                 </div>
