@@ -99,31 +99,33 @@ function traceElement() {
             let y2 = parseFloat(arrow.getAttribute("y2"));
             console.log(`Checking line from (${x1}, ${y1}) to (${x2}, ${y2})`);
 
-            if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
+            if ((cx === x1 && Math.abs(cy - y1) <= 30) || (cx === x2 && Math.abs(cy - y2) <= 30)) {
                 let arrowGroup = arrow.closest('g');
-                if (arrowGroup) tracedGroups.add(arrowGroup);
+                if (arrowGroup) {
+                    tracedGroups.add(arrowGroup);
+                    console.log(`Traced edge group: ${arrowGroup.id}`);
+
+                    
+                }
+
+                // Check for connected nodes (ellipses)
+                document.querySelectorAll('ellipse').forEach(node => {
+                    let nodeCx = parseFloat(node.getAttribute("cx"));
+                    let nodeCy = parseFloat(node.getAttribute("cy"));
+                    console.log(`Checking ellipse at (${nodeCx}, ${nodeCy})`);
+
+                    if ((nodeCx === x1 && Math.abs(nodeCy - y1) <= 30) || (nodeCx === x2 && Math.abs(nodeCy - y2) <= 30)) {
+                        let nodeGroup = node.closest('g');
+                        if (nodeGroup) {
+                            tracedGroups.add(nodeGroup);
+                            console.log(`Traced node group: ${nodeGroup.id}`);
+                        }
+                    }
+                });
             }
         });
 
-    } else if (selectedTag === 'line') {
-        // If an arrow (line) is selected, find connected nodes (ellipses)
-        let x1 = parseFloat(selectedElement.getAttribute("x1"));
-        let y1 = parseFloat(selectedElement.getAttribute("y1"));
-        let x2 = parseFloat(selectedElement.getAttribute("x2"));
-        let y2 = parseFloat(selectedElement.getAttribute("y2"));
-        console.log(`Selected line from (${x1}, ${y1}) to (${x2}, ${y2})`);
-
-        document.querySelectorAll('ellipse').forEach(node => {
-            let cx = parseFloat(node.getAttribute("cx"));
-            let cy = parseFloat(node.getAttribute("cy"));
-            console.log(`Checking ellipse at (${cx}, ${cy})`);
-
-            if ((cx === x1 && cy === y1) || (cx === x2 && cy === y2)) {
-                let nodeGroup = node.closest('g');
-                if (nodeGroup) tracedGroups.add(nodeGroup);
-            }
-        });
-    } else {
+    }  else {
         alert("Selected element is not traceable.");
         return;
     }
@@ -133,8 +135,8 @@ function traceElement() {
 
     // Provide feedback
     if (tracedGroups.size > 0) {
-        let tracedIds = Array.from(tracedGroups).map(group => group.id).join(', ');
-        alert(`Traced ${tracedGroups.size} connected elements: ${tracedIds}`);
+        let tracedIds = Array.from(tracedGroups).map(group => group.id).join('\n ');
+        alert(`Traced ${tracedGroups.size} connected elements: \n ${tracedIds}`);
     } else {
         alert("No connected elements found.");
     }
