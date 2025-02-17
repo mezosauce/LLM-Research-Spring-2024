@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
         arrows.forEach(({ arrowId, arrowheadId, startId, endId, textId }) => {
             const startElement = document.getElementById(startId);
-            const endElement = document.getElementById(endId);
+            const endElement = document.getElementById(endId) ;
             const arrow = document.getElementById(arrowId);
             const arrowhead = document.getElementById(arrowheadId);
             const text = document.getElementById(textId);
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Update the arrow line
                 arrow.setAttribute("x1", startX);
                 arrow.setAttribute("y1", startY);
-                arrow.setAttribute("x2", endX);
+                arrow.setAttribute("x2", endX );
                 arrow.setAttribute("y2", endY);
             } else if (arrow.tagName === "path") {
                 // Update the arrow path
