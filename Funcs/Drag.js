@@ -65,9 +65,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!svg) return;
     
         const arrows = [
+            // Configurations for Activity1.html
+            { arrowId: "arrow1", arrowheadId: "arrowhead1", startId: "idle", endId: "memberJoined", textId: "text1" },
+            { arrowId: "arrow2", arrowheadId: "arrowhead2", startId: "memberJoined", endId: "reactionAdded", textId: "text2" },
+            { arrowId: "arrow3", arrowheadId: "arrowhead3", startId: "memberJoined", endId: "userTagged", textId: "text3" },
+            { arrowId: "arrow4", arrowheadId: "arrowhead4", startId: "memberJoined", endId: "responseAdded", textId: "text4" },
+            { arrowId: "arrow5", arrowheadId: "arrowhead5", startId: "reactionAdded", endId: "idle", textId: "text5" },
+            { arrowId: "arrow6", arrowheadId: "arrowhead6", startId: "responseAdded", endId: "idle", textId: "text6" },
+            { arrowId: "arrow7", arrowheadId: "arrowhead7", startId: "userTagged", endId: "idle", textId: "text7" },
+            
+            // Configurations for Actvity2.html
             { arrowId: "arrow1", arrowheadId: "arrowhead1", startId: "idle", endId: "happy", textId: "text1" },
             { arrowId: "arrow2", arrowheadId: "arrowhead2", startId: "happy", endId: "tada", textId: "text2" },
-            // Add more arrow configurations as needed
         ];
     
         arrows.forEach(({ arrowId, arrowheadId, startId, endId, textId }) => {
@@ -84,11 +93,17 @@ document.addEventListener("DOMContentLoaded", function () {
             const endX = parseFloat(endElement.getAttribute("cx"));
             const endY = parseFloat(endElement.getAttribute("cy")) - parseFloat(endElement.getAttribute("ry"));
     
-            // Update the arrow line
-            arrow.setAttribute("x1", startX);
-            arrow.setAttribute("y1", startY);
-            arrow.setAttribute("x2", endX);
-            arrow.setAttribute("y2", endY);
+            if (arrow.tagName === "line") {
+                // Update the arrow line
+                arrow.setAttribute("x1", startX);
+                arrow.setAttribute("y1", startY);
+                arrow.setAttribute("x2", endX);
+                arrow.setAttribute("y2", endY);
+            } else if (arrow.tagName === "path") {
+                // Update the arrow path
+                const pathData = `M ${startX} ${startY} C ${(startX + endX) / 2} ${(startY + endY) / 2}, ${(startX + endX) / 2} ${(startY + endY) / 2}, ${endX} ${endY}`;
+                arrow.setAttribute("d", pathData);
+            }
     
             // Update the arrowhead
             if (arrowhead) {
