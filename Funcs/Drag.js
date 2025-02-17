@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
         arrows.forEach(({ arrowId, arrowheadId, startId, endId, textId }) => {
             const startElement = document.getElementById(startId);
-            const endElement = document.getElementById(endId) ;
+            const endElement = document.getElementById(endId);
             const arrow = document.getElementById(arrowId);
             const arrowhead = document.getElementById(arrowheadId);
             const text = document.getElementById(textId);
@@ -97,11 +97,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Update the arrow line
                 arrow.setAttribute("x1", startX);
                 arrow.setAttribute("y1", startY);
-                arrow.setAttribute("x2", endX );
+                arrow.setAttribute("x2", endX);
                 arrow.setAttribute("y2", endY);
             } else if (arrow.tagName === "path") {
                 // Update the arrow path
-                const pathData = `M ${startX} ${startY} C ${(startX + endX) / 2} ${(startY + endY) / 2}, ${(startX + endX) / 2} ${(startY + endY) / 2}, ${endX} ${endY}`;
+                const controlX1 = (startX + endX) / 2;
+                const controlY1 = startY - 50; // Adjust this value to control the curve
+                const controlX2 = (startX + endX) / 2;
+                const controlY2 = endY + 50; // Adjust this value to control the curve
+                const pathData = `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`;
                 arrow.setAttribute("d", pathData);
             }
     
@@ -130,8 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
             arrowhead.setAttribute("points", `${endX},${endY} ${x1},${y1} ${x2},${y2}`);
         }
     }
-    
-    
 
     document.querySelectorAll(".clickable").forEach(element => {
         element.addEventListener("mousedown", startDrag);
