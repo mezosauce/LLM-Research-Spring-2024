@@ -61,73 +61,59 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateArrows() {
-        let idle = document.getElementById("idle");
-        let happy = document.getElementById("happy");
-        let tada = document.getElementById("tada");
+        const svg = document.querySelector("svg");
+        if (!svg) return;
     
-        let arrow1 = document.getElementById("arrow1");
-        let arrowhead1 = document.getElementById("arrowhead1");
-        let arrow2 = document.getElementById("arrow2");
-        let arrowhead2 = document.getElementById("arrowhead2");
+        const arrows = [
+            { arrowId: "arrow1", arrowheadId: "arrowhead1", startId: "idle", endId: "happy", textId: "text1" },
+            { arrowId: "arrow2", arrowheadId: "arrowhead2", startId: "happy", endId: "tada", textId: "text2" },
+            // Add more arrow configurations as needed
+        ];
     
-        let text1 = document.getElementById("text1");
-        let text2 = document.getElementById("text2");
+        arrows.forEach(({ arrowId, arrowheadId, startId, endId, textId }) => {
+            const startElement = document.getElementById(startId);
+            const endElement = document.getElementById(endId);
+            const arrow = document.getElementById(arrowId);
+            const arrowhead = document.getElementById(arrowheadId);
+            const text = document.getElementById(textId);
     
-        if (!idle || !happy || !tada) return;
+            if (!startElement || !endElement || !arrow) return;
     
-        let idleX = parseFloat(idle.getAttribute("cx"));
-        let idleY = parseFloat(idle.getAttribute("cy")) + parseFloat(idle.getAttribute("ry"));
+            const startX = parseFloat(startElement.getAttribute("cx"));
+            const startY = parseFloat(startElement.getAttribute("cy")) + parseFloat(startElement.getAttribute("ry"));
+            const endX = parseFloat(endElement.getAttribute("cx"));
+            const endY = parseFloat(endElement.getAttribute("cy")) - parseFloat(endElement.getAttribute("ry"));
     
-        let happyX = parseFloat(happy.getAttribute("cx"));
-        let happyY = parseFloat(happy.getAttribute("cy")) - parseFloat(happy.getAttribute("ry"));
+            // Update the arrow line
+            arrow.setAttribute("x1", startX);
+            arrow.setAttribute("y1", startY);
+            arrow.setAttribute("x2", endX);
+            arrow.setAttribute("y2", endY);
     
-        let tadaX = parseFloat(tada.getAttribute("cx"));
-        let tadaY = parseFloat(tada.getAttribute("cy")) - parseFloat(tada.getAttribute("ry"));
+            // Update the arrowhead
+            if (arrowhead) {
+                updateArrowhead(arrowhead, startX, startY, endX, endY);
+            }
     
-        // Function to calculate the angle between two points
-        function getAngle(x1, y1, x2, y2) {
-            return Math.atan2(y2 - y1, x2 - x1);
-        }
+            // Update text position
+            if (text) {
+                text.setAttribute("x", (startX + endX) / 2 + 10);
+                text.setAttribute("y", (startY + endY) / 2);
+            }
+        });
     
-        // Function to update arrowhead based on angle
         function updateArrowhead(arrowhead, startX, startY, endX, endY) {
-            let angle = getAngle(startX, startY, endX, endY);
-            let arrowLength = 10; // Length of the arrowhead
+            const angle = Math.atan2(endY - startY, endX - startX);
+            const arrowLength = 10;
     
-            let x1 = endX - arrowLength * Math.cos(angle - Math.PI / 6);
-            let y1 = endY - arrowLength * Math.sin(angle - Math.PI / 6);
+            const x1 = endX - arrowLength * Math.cos(angle - Math.PI / 6);
+            const y1 = endY - arrowLength * Math.sin(angle - Math.PI / 6);
     
-            let x2 = endX - arrowLength * Math.cos(angle + Math.PI / 6);
-            let y2 = endY - arrowLength * Math.sin(angle + Math.PI / 6);
+            const x2 = endX - arrowLength * Math.cos(angle + Math.PI / 6);
+            const y2 = endY - arrowLength * Math.sin(angle + Math.PI / 6);
     
             arrowhead.setAttribute("points", `${endX},${endY} ${x1},${y1} ${x2},${y2}`);
         }
-    
-        // Update first arrow (Idle -> Happy)
-        arrow1.setAttribute("x1", idleX);
-        arrow1.setAttribute("y1", idleY);
-        arrow1.setAttribute("x2", happyX);
-        arrow1.setAttribute("y2", happyY);
-        updateArrowhead(arrowhead1, idleX, idleY, happyX, happyY);
-    
-        // Position the text for arrow 1 at the midpoint
-        let midX1 = ((idleX + happyX) / 2) + 10;
-        let midY1 = (idleY + happyY) / 2;
-        text1.setAttribute("x", midX1);
-        text1.setAttribute("y", midY1);
-    
-        // Update second arrow (Happy -> Tada)
-        arrow2.setAttribute("x1", happyX);
-        arrow2.setAttribute("y1", happyY + 60); // Adjusted for better visual alignment
-        arrow2.setAttribute("x2", tadaX);
-        arrow2.setAttribute("y2", tadaY );
-        updateArrowhead(arrowhead2, happyX, happyY + 60, tadaX, tadaY );
-    
-        // Position the text for arrow 2 at the midpoint
-        let midX2 = ((happyX + tadaX) / 2) + 10;
-        let midY2 = ((happyY + tadaY) / 2) + 30;
-        text2.setAttribute("x", midX2);
-        text2.setAttribute("y", midY2);
     }
     
     
