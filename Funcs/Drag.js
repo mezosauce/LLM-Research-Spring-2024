@@ -101,11 +101,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 arrow.setAttribute("y2", endY);
             } else if (arrow.tagName === "path") {
                 // Update the arrow path
-                const controlX1 = (startX + endX) / 2;
-                const controlY1 = startY - 50; // Adjust this value to control the curve
-                const controlX2 = (startX + endX) / 2;
-                const controlY2 = endY + 50; // Adjust this value to control the curve
-                const pathData = `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`;
+                const controlX1 = ((startX + endX) / 2) + 200;
+                const controlY1 = startY + 50; // Adjust this value to control the curve
+                const controlX2 = ((startX + endX) / 2) + 200;
+                const controlY2 = endY - 50; // Adjust this value to control the curve
+                const pathData = `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY }`;
                 arrow.setAttribute("d", pathData);
             }
     
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
             // Update text position
             if (text) {
-                text.setAttribute("x", (startX + endX) / 2 + 10);
+                text.setAttribute("x", (startX + endX) / 2);
                 text.setAttribute("y", (startY + endY) / 2);
             }
         });
