@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const controlY1 = startY + 50; // Adjust this value to control the curve
                 const controlX2 = ((startX + endX) / 2) + 200;
                 const controlY2 = endY - 50; // Adjust this value to control the curve
-                const pathData = `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY }`;
+                const pathData = `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`;
                 arrow.setAttribute("d", pathData);
             }
     
