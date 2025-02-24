@@ -29,6 +29,13 @@ document.querySelectorAll('.clickable').forEach(element => {
         console.log(`Context menu for element: ${window.selectedElement ? window.selectedElement.id : 'none'}`);
         showContextMenu(event);
     });
+
+    // Prevent dragging of locked elements
+    element.addEventListener('mousedown', (event) => {
+        if (element.classList.contains('locked')) {
+            event.preventDefault();
+        }
+    });
 });
 
 // Define the showContextMenu function
@@ -104,8 +111,6 @@ function traceElement() {
                 if (arrowGroup) {
                     tracedGroups.add(arrowGroup);
                     console.log(`Traced edge group: ${arrowGroup.id}`);
-
-                    
                 }
 
                 // Check for connected nodes (ellipses)
@@ -125,7 +130,7 @@ function traceElement() {
             }
         });
 
-    }  else {
+    } else {
         alert("Selected element is not traceable.");
         return;
     }
